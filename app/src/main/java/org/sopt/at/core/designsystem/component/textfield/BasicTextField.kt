@@ -46,54 +46,58 @@ fun BasicTextField(
     isPasswordVisible: Boolean = true,
     singleLine: Boolean = true,
     leadingIcon: @Composable () -> Unit = {},
-    trailingIcon: @Composable () -> Unit = {}
+    trailingIcon: @Composable () -> Unit = {},
 ) {
     BasicTextField(
         value = value,
         onValueChange = { newValue ->
             onValueChanged(newValue)
         },
-        visualTransformation = if (isPasswordVisible) {
-            VisualTransformation.None
-        } else {
-            PasswordVisualTransformation()
-        },
-        modifier = modifier
-            .clip(RoundedCornerShape(8.dp))
-            .border(1.dp, borderColor, RoundedCornerShape(8.dp))
-            .background(backgroundColor)
-            .padding(horizontal = 12.dp)
-            .focusRequester(focusRequester)
-            .onFocusChanged { focusState -> onFocusChanged(focusState.isFocused) },
+        visualTransformation =
+            if (isPasswordVisible) {
+                VisualTransformation.None
+            } else {
+                PasswordVisualTransformation()
+            },
+        modifier =
+            modifier
+                .clip(RoundedCornerShape(8.dp))
+                .border(1.dp, borderColor, RoundedCornerShape(8.dp))
+                .background(backgroundColor)
+                .padding(horizontal = 12.dp)
+                .focusRequester(focusRequester)
+                .onFocusChanged { focusState -> onFocusChanged(focusState.isFocused) },
         singleLine = singleLine,
         keyboardOptions = KeyboardOptions(imeAction = imeAction),
-        keyboardActions = KeyboardActions(
-            onDone = { onDoneAction() }
-        ),
+        keyboardActions =
+            KeyboardActions(
+                onDone = { onDoneAction() },
+            ),
         textStyle = TextStyle(color = Color.White, fontSize = 16.sp),
         decorationBox = { innerTextField ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 leadingIcon()
                 Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(vertical = 12.dp)
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .padding(vertical = 12.dp),
                 ) {
                     innerTextField()
                     if (value.isEmpty()) {
                         Text(
                             text = placeholder,
                             color = Color.Gray,
-                            fontSize = 16.sp
+                            fontSize = 16.sp,
                         )
                     }
                 }
                 trailingIcon()
             }
-        }
+        },
     )
 }
 
@@ -112,6 +116,6 @@ private fun BasicTextFieldPreview() {
         borderColor = Color.Unspecified,
         onFocusChanged = { focused ->
             isFocused = focused
-        }
+        },
     )
 }

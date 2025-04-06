@@ -25,22 +25,23 @@ fun BasicButton(
     modifier: Modifier = Modifier,
     textColor: Color = Color.LightGray,
     borderColor: Color = Color.Unspecified,
-    backgroundColor: Color = Color.DarkGray
+    backgroundColor: Color = Color.DarkGray,
 ) {
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .fillMaxWidth()
-            .border(1.dp, color = borderColor, shape = RoundedCornerShape(4.dp))
-            .clickable(onClick = onClick, enabled = enabled)
-            .clip(RoundedCornerShape(8.dp))
-            .background(backgroundColor)
-            .padding(12.dp)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .border(1.dp, color = borderColor, shape = RoundedCornerShape(4.dp))
+                .clickable(onClick = onClick, enabled = enabled)
+                .clip(RoundedCornerShape(8.dp))
+                .background(backgroundColor)
+                .padding(12.dp),
     ) {
         Text(
             text = buttonText,
-            color = textColor
+            color = textColor,
         )
     }
 }
@@ -51,6 +52,6 @@ private fun BasicButtonPreview() {
     BasicButton(
         onClick = { },
         buttonText = "Click me",
-        enabled = true
+        enabled = true,
     )
 }
