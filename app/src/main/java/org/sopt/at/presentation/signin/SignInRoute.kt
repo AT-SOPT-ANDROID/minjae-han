@@ -11,14 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -40,18 +34,20 @@ fun SignInRoute(
     paddingValues: PaddingValues,
     onBackClick: () -> Unit,
     onSignUpClick: () -> Unit,
+    userId: String,
+    onUserIdChanged: (String) -> Unit,
+    userPassword: String,
+    onPasswordChanged: (String) -> Unit,
+    onSignInClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var userId by remember { mutableStateOf("") }
-    var userPassword by remember { mutableStateOf("") }
-
     SignInScreen(
         onBackClick = onBackClick,
         userId = userId,
-        onUserIdChanged = { userId = it },
+        onUserIdChanged = onUserIdChanged,
         userPassword = userPassword,
-        onPasswordChanged = { userPassword = it },
-        onSignInClick = { },
+        onPasswordChanged = onPasswordChanged,
+        onSignInClick = onSignInClick,
         onSignUpClick = onSignUpClick,
         modifier = modifier.padding(paddingValues)
     )

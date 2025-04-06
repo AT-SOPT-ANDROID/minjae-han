@@ -2,6 +2,7 @@ package org.sopt.at.presentation.signup
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -17,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import org.sopt.at.presentation.signin.SignInActivity
 import org.sopt.at.presentation.signup.id.SignUpIdRoute
 import org.sopt.at.presentation.signup.password.SignUpPasswordRoute
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
@@ -35,11 +35,8 @@ class SignUpActivity : ComponentActivity() {
         }
 
         setContent {
-            ATSOPTANDROIDTheme(
-                darkTheme = true
-            ) {
-                Scaffold(modifier = Modifier.Companion.fillMaxSize()) { innerPadding ->
-
+            ATSOPTANDROIDTheme(darkTheme = true) {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     val context = LocalContext.current
                     var userId by remember { mutableStateOf("") }
                     var userPassword by remember { mutableStateOf("") }
@@ -74,11 +71,14 @@ class SignUpActivity : ComponentActivity() {
                                         userPassword.any { "!@#$%^&*~".contains(it) }
 
                                 if (isValidPassword) {
-                                    val intent = android.content.Intent(
-                                        context,
-                                        SignInActivity::class.java
-                                    )
-                                    context.startActivity(intent)
+                                    Toast.makeText(context, "회원가입 성공!", Toast.LENGTH_SHORT).show()
+                                    val resultIntent =
+                                        Intent().apply {
+                                            putExtra("USER_ID", userId)
+                                            putExtra("USER_PASSWORD", userPassword)
+                                        }
+                                    setResult(RESULT_OK, resultIntent)
+                                    finish()
                                 } else {
                                     Toast.makeText(context, "비밀번호는 영문, 숫자, 특수문자를 포함한 8자 이상이어야 합니다.", Toast.LENGTH_SHORT).show()
                                 }

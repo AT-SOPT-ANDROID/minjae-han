@@ -71,7 +71,7 @@ fun SignUpPasswordScreen(
             value = password,
             onValueChanged = onPasswordChanged,
             placeholder = "비밀번호",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(16.dp))

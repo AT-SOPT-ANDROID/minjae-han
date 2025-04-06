@@ -46,7 +46,7 @@ fun BasicTextField(
     isPasswordVisible: Boolean = true,
     singleLine: Boolean = true,
     leadingIcon: @Composable () -> Unit = {},
-    trailingIcon: @Composable () -> Unit = {},
+    trailingIcon: @Composable () -> Unit = {}
 ) {
     BasicTextField(
         value = value,
@@ -77,27 +77,27 @@ fun BasicTextField(
         decorationBox = { innerTextField ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 leadingIcon()
                 Box(
                     modifier =
                         Modifier
                             .weight(1f)
-                            .padding(vertical = 12.dp),
+                            .padding(vertical = 12.dp)
                 ) {
                     innerTextField()
                     if (value.isEmpty()) {
                         Text(
                             text = placeholder,
                             color = Color.Gray,
-                            fontSize = 16.sp,
+                            fontSize = 16.sp
                         )
                     }
                 }
                 trailingIcon()
             }
-        },
+        }
     )
 }
 
@@ -116,6 +116,6 @@ private fun BasicTextFieldPreview() {
         borderColor = Color.Unspecified,
         onFocusChanged = { focused ->
             isFocused = focused
-        },
+        }
     )
 }

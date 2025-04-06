@@ -18,7 +18,7 @@ import org.sopt.at.R
 fun BasicTopBar(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    trailingContent: @Composable (() -> Unit) = {},
+    trailingContent: @Composable (() -> Unit) = {}
 ) {
     Row(
         modifier =
@@ -31,7 +31,7 @@ fun BasicTopBar(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_back_24),
             tint = Color.White,
             contentDescription = null,
-            modifier = Modifier.clickable(onClick = onBackClick),
+            modifier = Modifier.clickable(onClick = onBackClick)
         )
         trailingContent()
     }
