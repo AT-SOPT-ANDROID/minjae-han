@@ -3,6 +3,7 @@ package org.sopt.at.presentation.signin.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,6 +35,7 @@ import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 
 @Composable
 fun SignInRoute(
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier
 ) {
     var userId by remember { mutableStateOf("") }
@@ -50,7 +52,7 @@ fun SignInRoute(
         onPasswordChanged = { userPassword = it },
         onSignInClick = { },
         onSignUpClick = { },
-        modifier = modifier
+        modifier = modifier.padding(paddingValues)
     )
 }
 
