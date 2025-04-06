@@ -25,14 +25,11 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 
 @Composable
 fun BasicTextField(
@@ -90,7 +87,7 @@ fun BasicTextField(
                         Text(
                             text = placeholder,
                             color = Color.Gray,
-                            fontSize = 16.sp,
+                            fontSize = 16.sp
                         )
                     }
                 }
@@ -106,15 +103,15 @@ private fun BasicTextFieldPreview() {
     var text by remember { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
 
-        BasicTextField(
-            value = text,
-            placeholder = "플레이스 홀더",
-            onValueChanged = { newText ->
-                text = newText
-            },
-            borderColor = Color.Unspecified,
-            onFocusChanged = { focused ->
-                isFocused = focused
-            }
-        )
+    BasicTextField(
+        value = text,
+        placeholder = "플레이스 홀더",
+        onValueChanged = { newText ->
+            text = newText
+        },
+        borderColor = Color.Unspecified,
+        onFocusChanged = { focused ->
+            isFocused = focused
+        }
+    )
 }

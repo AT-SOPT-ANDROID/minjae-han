@@ -26,11 +26,11 @@ fun MenuList(
     ) {
         Text(
             text = "아이디 찾기",
-            color = Color.LightGray,
+            color = Color.LightGray
         )
         Text(
             text = "비밀번호 찾기",
-            color = Color.LightGray,
+            color = Color.LightGray
         )
         Text(
             text = "회원가입",

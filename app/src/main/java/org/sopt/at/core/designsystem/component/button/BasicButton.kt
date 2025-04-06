@@ -24,7 +24,7 @@ fun BasicButton(
     enabled: Boolean = false,
     modifier: Modifier = Modifier,
     textColor: Color = Color.LightGray,
-    borderColor: Color = Color.Unspecified ,
+    borderColor: Color = Color.Unspecified,
     backgroundColor: Color = Color.DarkGray
 ) {
     Row(

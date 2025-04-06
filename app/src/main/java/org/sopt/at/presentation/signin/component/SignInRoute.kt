@@ -27,9 +27,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.sopt.at.core.designsystem.component.button.BasicButton
-import org.sopt.at.core.designsystem.component.topbar.BasicTopBar
 import org.sopt.at.core.designsystem.component.textfield.PasswordTextField
 import org.sopt.at.core.designsystem.component.textfield.UserIdTextField
+import org.sopt.at.core.designsystem.component.topbar.BasicTopBar
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 
 @Composable
@@ -48,8 +48,8 @@ fun SignInRoute(
         onUserIdChanged = { userId = it },
         userPassword = userPassword,
         onPasswordChanged = { userPassword = it },
-        onSignInClick = {  },
-        onSignUpClick = {  },
+        onSignInClick = { },
+        onSignUpClick = { },
         modifier = modifier
     )
 }
@@ -72,7 +72,7 @@ fun SignInScreen(
             .padding(20.dp),
         verticalArrangement = Arrangement.Top
     ) {
-        BasicTopBar( onBackClick = onBackClick )
+        BasicTopBar(onBackClick = onBackClick)
 
         Spacer(modifier = Modifier.height(40.dp))
 
@@ -87,7 +87,7 @@ fun SignInScreen(
         UserIdTextField(
             value = userId,
             placeholder = "아이디",
-            onValueChanged = onUserIdChanged,
+            onValueChanged = onUserIdChanged
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -95,7 +95,7 @@ fun SignInScreen(
         PasswordTextField(
             value = userPassword,
             placeholder = "비밀번호",
-            onValueChanged = onPasswordChanged,
+            onValueChanged = onPasswordChanged
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -105,7 +105,7 @@ fun SignInScreen(
             enabled = true,
             buttonText = "로그인 하기",
             borderColor = Color.DarkGray,
-            textColor = Color.Gray,
+            textColor = Color.Gray
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -133,7 +133,6 @@ fun SignInScreen(
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )
-
     }
 }
 

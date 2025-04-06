@@ -16,17 +16,16 @@ import org.sopt.at.R
 
 @Composable
 fun BasicTopBar(
-    onBackClick:() -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    trailingContent: @Composable (() -> Unit) = {},
+    trailingContent: @Composable (() -> Unit) = {}
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .background(Color.Black),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        )
-    {
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_back_24),
             tint = Color.White,

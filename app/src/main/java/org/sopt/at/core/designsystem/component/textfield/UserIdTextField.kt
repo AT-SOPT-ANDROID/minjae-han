@@ -15,7 +15,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.at.core.designsystem.component.textfield.SoptValidator.isUserIdFormat
 
-
 @Composable
 fun UserIdTextField(
     value: String,
@@ -65,7 +64,6 @@ private fun UserIdTextFieldPreview() {
         placeholder = "아이디",
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 16.dp)
     )
-
 }
