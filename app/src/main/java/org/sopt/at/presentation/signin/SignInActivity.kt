@@ -18,7 +18,7 @@ class SignInActivity : ComponentActivity() {
         setContent {
             ATSOPTANDROIDTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    SignInRoute(modifier = Modifier.padding(innerPadding))
+                    SignInRoute(paddingValues = innerPadding)
                 }
             }
         }
