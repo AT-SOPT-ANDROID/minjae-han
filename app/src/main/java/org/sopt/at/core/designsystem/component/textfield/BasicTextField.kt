@@ -59,19 +59,18 @@ fun BasicTextField(
             } else {
                 PasswordVisualTransformation()
             },
-        modifier =
-            modifier
-                .clip(RoundedCornerShape(8.dp))
-                .border(1.dp, borderColor, RoundedCornerShape(8.dp))
-                .background(backgroundColor)
-                .padding(horizontal = 12.dp)
-                .focusRequester(focusRequester)
-                .onFocusChanged { focusState -> onFocusChanged(focusState.isFocused) },
+        modifier = modifier
+            .clip(RoundedCornerShape(8.dp))
+            .border(1.dp, borderColor, RoundedCornerShape(8.dp))
+            .background(backgroundColor)
+            .padding(horizontal = 12.dp)
+            .focusRequester(focusRequester)
+            .onFocusChanged { focusState -> onFocusChanged(focusState.isFocused) },
         singleLine = singleLine,
         keyboardOptions = KeyboardOptions(imeAction = imeAction),
         keyboardActions =
             KeyboardActions(
-                onDone = { onDoneAction() },
+                onDone = { onDoneAction() }
             ),
         textStyle = TextStyle(color = Color.White, fontSize = 16.sp),
         decorationBox = { innerTextField ->
