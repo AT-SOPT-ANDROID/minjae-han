@@ -8,8 +8,8 @@ versionName = "1.0.0"
 kotlinCompilerExtensionVersion = "1.5.15"
 
 # Kotlin
-agp = "8.9.0"
-kotlin = "2.0.0"
+agp = "8.9.1"
+kotlin = "2.1.20"
 
 # Test
 junit = "4.13.2"
@@ -23,10 +23,10 @@ activityCompose = "1.9.3"
 composeBom = "2024.04.01"
 
 # Third Party
-ktlint = "11.5.1"
+ktlint = "12.2.0"
 
 # Kotlin Symbol Processing
-ksp = "2.0.0-1.0.24"
+ksp = "2.1.20-1.0.32"
 
 [libraries]
 # Test

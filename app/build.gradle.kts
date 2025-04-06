@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "org.sopt.at"
-    compileSdk = 35
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "org.sopt.at"
