@@ -21,10 +21,9 @@ fun BasicTopBar(
     trailingContent: @Composable (() -> Unit) = {}
 ) {
     Row(
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .background(Color.Black),
+        modifier = modifier
+            .fillMaxWidth()
+            .background(Color.Black),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Icon(
