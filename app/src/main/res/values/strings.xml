@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AT SOPT ANDROID</string>
+    <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="title_activity_my_page">MyPageActivity</string>
 </resources>
