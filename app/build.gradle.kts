@@ -69,5 +69,5 @@ ktlint {
     debug = true
     coloredOutput = true
     verbose = true
-    outputToConsole = true
+    outputToConsole = false
 }

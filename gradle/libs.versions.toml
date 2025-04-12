@@ -23,7 +23,7 @@ activityCompose = "1.9.3"
 composeBom = "2024.04.01"
 
 # Third Party
-ktlint = "12.2.0"
+ktlint = "11.5.1"
 
 # Kotlin Symbol Processing
 ksp = "2.1.20-1.0.32"

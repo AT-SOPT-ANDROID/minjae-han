@@ -24,7 +24,7 @@ fun BasicTopBar(
         modifier = modifier
             .fillMaxWidth()
             .background(Color.Black),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_back_24),
