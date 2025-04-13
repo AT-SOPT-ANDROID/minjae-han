@@ -7,4 +7,6 @@ interface UserRepository {
     fun getUserId(): Flow<String?>
     fun getUserPassword(): Flow<String?>
     suspend fun clearUserCredentials()
+    suspend fun setAutoLogin(enabled: Boolean)
+    fun isAutoLoginEnabled(): Flow<Boolean>
 }

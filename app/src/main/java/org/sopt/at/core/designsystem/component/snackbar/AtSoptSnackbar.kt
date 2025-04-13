@@ -24,7 +24,7 @@ fun AtSoptSnackbar(
             .padding(bottom = 20.dp, start = 20.dp, end = 20.dp)
             .alpha(0.88f)
             .clip(RoundedCornerShape(10.dp))
-            .background(Color.Gray)
+            .background(Color.LightGray)
     ) {
         Text(
             text = text,

@@ -109,7 +109,7 @@ fun SignInScreen(
         Spacer(modifier = Modifier.height(40.dp))
 
         Text(
-            text = "TIVING ID 로그인",
+            text = "TVING ID 로그인",
             fontSize = 28.sp,
             color = Color.White,
             fontWeight = FontWeight.Bold
@@ -140,7 +140,8 @@ fun SignInScreen(
             enabled = isButtonEnabled,
             buttonText = "로그인 하기",
             borderColor = if (isButtonEnabled) Color.White else Color.DarkGray,
-            textColor = if (isButtonEnabled) Color.White else Color.Gray
+            textColor = if (isButtonEnabled) Color.Black else Color.White,
+            backgroundColor = if (isButtonEnabled) Color.White else Color.DarkGray
         )
 
         Spacer(modifier = Modifier.height(20.dp))

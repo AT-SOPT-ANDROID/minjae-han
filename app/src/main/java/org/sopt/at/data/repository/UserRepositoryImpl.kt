@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -20,6 +21,7 @@ class UserRepositoryImpl @Inject constructor(
 ) : UserRepository {
     private val userId = stringPreferencesKey("user_id")
     private val userPassword = stringPreferencesKey("user_password")
+    private val autoLogin = booleanPreferencesKey("auto_login_enabled")
 
     override suspend fun saveUserCredentials(id: String, password: String) {
         context.dataStore.edit { preferences ->
@@ -44,6 +46,19 @@ class UserRepositoryImpl @Inject constructor(
         context.dataStore.edit { preferences ->
             preferences.remove(userId)
             preferences.remove(userPassword)
+            preferences[autoLogin] = false
+        }
+    }
+
+    override suspend fun setAutoLogin(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[autoLogin] = enabled
+        }
+    }
+
+    override fun isAutoLoginEnabled(): Flow<Boolean> {
+        return context.dataStore.data.map { preferences ->
+            preferences[autoLogin] ?: false
         }
     }
 }
