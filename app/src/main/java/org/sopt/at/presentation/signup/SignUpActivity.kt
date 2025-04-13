@@ -66,9 +66,9 @@ class SignUpActivity : ComponentActivity() {
                             onBackClick = { isNextStep = true },
                             onNextClick = {
                                 val isValidPassword = userPassword.length >= 8 &&
-                                        userPassword.any { it.isDigit() } &&
-                                        userPassword.any { it.isLetter() } &&
-                                        userPassword.any { "!@#$%^&*~".contains(it) }
+                                    userPassword.any { it.isDigit() } &&
+                                    userPassword.any { it.isLetter() } &&
+                                    userPassword.any { "!@#$%^&*~".contains(it) }
 
                                 if (isValidPassword) {
                                     Toast.makeText(context, "회원가입 성공!", Toast.LENGTH_SHORT).show()

@@ -53,12 +53,11 @@ fun BasicTextField(
         onValueChange = { newValue ->
             onValueChanged(newValue)
         },
-        visualTransformation =
-            if (isPasswordVisible) {
-                VisualTransformation.None
-            } else {
-                PasswordVisualTransformation()
-            },
+        visualTransformation = if (isPasswordVisible) {
+            VisualTransformation.None
+        } else {
+            PasswordVisualTransformation()
+        },
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
             .border(1.dp, borderColor, RoundedCornerShape(8.dp))
@@ -68,10 +67,9 @@ fun BasicTextField(
             .onFocusChanged { focusState -> onFocusChanged(focusState.isFocused) },
         singleLine = singleLine,
         keyboardOptions = KeyboardOptions(imeAction = imeAction),
-        keyboardActions =
-            KeyboardActions(
-                onDone = { onDoneAction() }
-            ),
+        keyboardActions = KeyboardActions(
+            onDone = { onDoneAction() }
+        ),
         textStyle = TextStyle(color = Color.White, fontSize = 16.sp),
         decorationBox = { innerTextField ->
             Row(
@@ -80,10 +78,9 @@ fun BasicTextField(
             ) {
                 leadingIcon()
                 Box(
-                    modifier =
-                        Modifier
-                            .weight(1f)
-                            .padding(vertical = 12.dp)
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(vertical = 12.dp)
                 ) {
                     innerTextField()
                     if (value.isEmpty()) {
