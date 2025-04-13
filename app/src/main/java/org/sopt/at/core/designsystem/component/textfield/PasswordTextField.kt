@@ -45,7 +45,7 @@ fun PasswordTextField(
         value = value,
         placeholder = placeholder,
         onValueChanged = { newText ->
-            if (newText.length <= maxLength && isPasswordFormat(newText)) {
+            if (newText.length <= maxLength && (newText.isEmpty() || isPasswordFormat(newText))) {
                 onValueChanged(newText)
             }
         },

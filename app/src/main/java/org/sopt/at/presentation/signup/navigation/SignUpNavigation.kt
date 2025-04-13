@@ -1,85 +1,63 @@
 package org.sopt.at.presentation.signup.navigation
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 import org.sopt.at.core.navigation.Route
 import org.sopt.at.presentation.signup.SignUpIdRoute
 import org.sopt.at.presentation.signup.SignUpPasswordRoute
+import org.sopt.at.presentation.signup.SignUpScreen
+import org.sopt.at.presentation.signup.SignUpViewModel
 
-fun NavController.navigateToSignUpId(
+fun NavController.navigateToSignUp(
     navOptions: NavOptions? = null
 ) {
-    navigate(SignUpId, navOptions)
+    navigate(SignUp, navOptions)
 }
 
-fun NavGraphBuilder.signUpIdNavGraph(
+fun NavGraphBuilder.signUpNavGraph(
     paddingValues: PaddingValues,
-    navigateUp: () -> Unit,
-    navigateToSignUpPassword: () -> Unit
+    navigateToSingIn: () -> Unit,
+    navigateUp: () -> Unit
 ) {
-    composable<SignUpId>(
-        enterTransition = {
-            slideIntoContainer(
-                AnimatedContentTransitionScope.SlideDirection.Right,
-                animationSpec = tween(500)
-            )
-        },
-        exitTransition = {
-            slideOutOfContainer(
-                AnimatedContentTransitionScope.SlideDirection.Left,
-                animationSpec = tween(500)
-            )
-        }
-    ) {
-        SignUpIdRoute(
+    composable<SignUp>{
+        SignUpScreen(
             paddingValues = paddingValues,
-            onBackClick = navigateUp,
-            onNextClick = navigateToSignUpPassword
+            navigateToSingIn = navigateToSingIn,
+            navigateUp = navigateUp
         )
     }
 }
 
-fun NavController.navigateToSignUpPassword(
-    navOptions: NavOptions? = null
-) {
-    navigate(SignUpPassword, navOptions)
-}
-
-fun NavGraphBuilder.signUpPasswordNavGraph(
+fun NavGraphBuilder.signUpGraph(
     paddingValues: PaddingValues,
+    navController: NavHostController,
+    viewModel: SignUpViewModel,
     navigateUp: () -> Unit,
     navigateToSignIn: () -> Unit
 ) {
-    composable<SignUpPassword>(
-        enterTransition = {
-            slideIntoContainer(
-                AnimatedContentTransitionScope.SlideDirection.Left,
-                animationSpec = tween(500)
-            )
-        },
-        exitTransition = {
-            slideOutOfContainer(
-                AnimatedContentTransitionScope.SlideDirection.Right,
-                animationSpec = tween(500)
-            )
-        }
-    ) {
-        SignUpPasswordRoute(
+    composable<SignUpId>{
+        SignUpIdRoute(
+            viewModel = viewModel,
             paddingValues = paddingValues,
             onBackClick = navigateUp,
-            onNextClick = navigateToSignIn
+            onNextClick = {navController.navigate(SignUpPassword)},
+        )
+    }
+    composable<SignUpPassword>{
+        SignUpPasswordRoute(
+            viewModel = viewModel,
+            paddingValues = paddingValues,
+            onBackClick = navigateUp,
+            onNextClick = navigateToSignIn,
         )
     }
 }
 
 @Serializable
-data object SignUpId : Route
+data object SignUp : Route
 
-@Serializable
-data object SignUpPassword : Route

@@ -1,5 +1,7 @@
 package org.sopt.at.presentation.signup
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -61,7 +63,6 @@ class SignUpViewModel @Inject constructor(
     
     fun saveUserCredentials() {
         viewModelScope.launch {
-            // 아이디와 비밀번호가 모두 유효한지 확인
             if (!isValidUserId(_state.value.userId) || !isValidPassword(_state.value.password)) {
                 _sideEffect.emit(SignUpSideEffect.ShowSnackbar("아이디 또는 비밀번호가 유효하지 않습니다."))
                 return@launch

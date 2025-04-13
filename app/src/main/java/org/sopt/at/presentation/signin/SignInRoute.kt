@@ -11,15 +11,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -28,10 +26,15 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
 import org.sopt.at.core.designsystem.component.button.BasicButton
 import org.sopt.at.core.designsystem.component.textfield.PasswordTextField
 import org.sopt.at.core.designsystem.component.textfield.UserIdTextField
 import org.sopt.at.core.designsystem.component.topbar.BasicTopBar
+import org.sopt.at.core.designsystem.event.LocalSnackBarTrigger
+import org.sopt.at.core.state.UiState
 import org.sopt.at.core.util.extension.addFocusCleaner
 import org.sopt.at.presentation.signin.component.MenuList
 
@@ -40,19 +43,39 @@ fun SignInRoute(
     paddingValues: PaddingValues,
     onBackClick: () -> Unit,
     onSignUpClick: () -> Unit,
-    onSignInClick: () -> Unit
+    onSignInClick: () -> Unit,
+    viewModel: SignInViewModel = hiltViewModel()
 ) {
-    var userId by remember { mutableStateOf("") }
-    var userPassword by remember { mutableStateOf("") }
+    val state by viewModel.state.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val snackbarTrigger = LocalSnackBarTrigger.current
+
+    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { effect ->
+            when (effect) {
+                is SignInSideEffect.ShowSnackbar -> {
+                    snackbarTrigger(effect.message)
+                }
+            }
+        }
+    }
+    
+    LaunchedEffect(uiState) {
+        if (uiState is UiState.Success) {
+            onSignInClick()
+        }
+    }
 
     SignInScreen(
         onBackClick = onBackClick,
-        userId = userId,
-        onUserIdChanged = { userId = it },
-        userPassword = userPassword,
-        onPasswordChanged = { userPassword = it },
-        onSignInClick = onSignInClick,
+        userId = state.userId,
+        onUserIdChanged = viewModel::updateUserId,
+        userPassword = state.password,
+        onPasswordChanged = viewModel::updatePassword,
+        onSignInClick = viewModel::signIn,
         onSignUpClick = onSignUpClick,
+        isButtonEnabled = state.isInputValid,
         paddingValues = paddingValues
     )
 }
@@ -67,6 +90,7 @@ fun SignInScreen(
     onPasswordChanged: (String) -> Unit,
     onSignInClick: () -> Unit,
     onSignUpClick: () -> Unit,
+    isButtonEnabled: Boolean,
     modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
@@ -113,10 +137,10 @@ fun SignInScreen(
 
         BasicButton(
             onClick = onSignInClick,
-            enabled = true,
+            enabled = isButtonEnabled,
             buttonText = "로그인 하기",
-            borderColor = Color.DarkGray,
-            textColor = Color.Gray
+            borderColor = if (isButtonEnabled) Color.White else Color.DarkGray,
+            textColor = if (isButtonEnabled) Color.White else Color.Gray
         )
 
         Spacer(modifier = Modifier.height(20.dp))

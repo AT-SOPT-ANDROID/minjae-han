@@ -2,7 +2,6 @@ import android.app.Activity
 import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -16,7 +15,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.delay
@@ -29,8 +27,7 @@ import org.sopt.at.presentation.main.component.MainBottomBar
 import org.sopt.at.presentation.main.rememberMainNavigator
 import org.sopt.at.presentation.mypage.navigation.myPageNavGraph
 import org.sopt.at.presentation.signin.navigation.signInNavGraph
-import org.sopt.at.presentation.signup.navigation.signUpIdNavGraph
-import org.sopt.at.presentation.signup.navigation.signUpPasswordNavGraph
+import org.sopt.at.presentation.signup.navigation.signUpNavGraph
 
 const val SHOW_SNACKBAR_TIMEMILLIS = 3000L
 
@@ -89,15 +86,10 @@ fun MainScreen(
                     navigateToMyPage = navigator::navigateToMyPage,
                     navigateToSignUpId = navigator::navigateToSignUpId
                 )
-                signUpIdNavGraph(
+                signUpNavGraph(
                     paddingValues = paddingValues,
                     navigateUp = navigator::navigateUp,
-                    navigateToSignUpPassword = navigator::navigateToSignUpPassword
-                )
-                signUpPasswordNavGraph(
-                    paddingValues = paddingValues,
-                    navigateUp = navigator::navigateUp,
-                    navigateToSignIn = navigator::navigateToSignIn
+                    navigateToSingIn = navigator::navigateToSignIn
                 )
                 myPageNavGraph(
                     paddingValues = paddingValues,

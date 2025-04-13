@@ -10,10 +10,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
@@ -22,9 +21,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
 import org.sopt.at.core.designsystem.component.button.BasicButton
 import org.sopt.at.core.designsystem.component.textfield.UserIdTextField
 import org.sopt.at.core.designsystem.component.topbar.BasicTopBar
+import org.sopt.at.core.designsystem.event.LocalSnackBarTrigger
 import org.sopt.at.core.util.extension.addFocusCleaner
 import org.sopt.at.core.util.extension.imePadding
 
@@ -32,15 +35,32 @@ import org.sopt.at.core.util.extension.imePadding
 fun SignUpIdRoute(
     paddingValues: PaddingValues,
     onBackClick: () -> Unit,
-    onNextClick: () -> Unit
+    onNextClick: () -> Unit,
+    viewModel: SignUpViewModel
 ) {
-    var userId by remember { mutableStateOf("") }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val snackbarTrigger = LocalSnackBarTrigger.current
+
+    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { effect ->
+            when (effect) {
+                is SignUpSideEffect.ShowSnackbar -> {
+                    snackbarTrigger(effect.message)
+                }
+            }
+        }
+    }
+
+    val state by viewModel.state.collectAsState()
+    val isButtonEnabled = viewModel.isValidUserId(state.userId)
 
     SignUpIdScreen(
         onBackClick = onBackClick,
-        userId = userId,
-        onUserIdChanged = { userId = it },
+        userId = state.userId,
+        onUserIdChanged = viewModel::updateUserId,
         onNextClick = onNextClick,
+        isButtonEnabled = isButtonEnabled,
         paddingValues = paddingValues
     )
 }
@@ -52,10 +72,11 @@ fun SignUpIdScreen(
     userId: String,
     onUserIdChanged: (String) -> Unit,
     onNextClick: () -> Unit,
+    isButtonEnabled: Boolean,
     modifier: Modifier = Modifier
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
         modifier = modifier
@@ -78,16 +99,18 @@ fun SignUpIdScreen(
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )
+
         Spacer(modifier = Modifier.height(20.dp))
 
         UserIdTextField(
             value = userId,
-            placeholder = "아이디",
             onValueChanged = onUserIdChanged,
             onDoneAction = {
                 keyboardController?.hide()
                 focusManager.clearFocus()
             },
+            placeholder = "아이디",
+            modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -104,11 +127,11 @@ fun SignUpIdScreen(
 
         BasicButton(
             onClick = onNextClick,
-            enabled = true,
+            enabled = isButtonEnabled,
             buttonText = "다음",
-            borderColor = Color.LightGray,
+            borderColor = if (isButtonEnabled) Color.White else Color.LightGray,
             textColor = Color.White,
-            backgroundColor = Color.Black
+            backgroundColor = if (isButtonEnabled) Color.Gray else Color.Black
         )
     }
 }
