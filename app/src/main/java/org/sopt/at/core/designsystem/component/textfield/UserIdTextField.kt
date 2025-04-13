@@ -13,7 +13,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.at.core.designsystem.component.textfield.SoptValidator.isUserIdFormat
+import org.sopt.at.core.util.validation.SoptValidator.isUserIdFormat
 
 @Composable
 fun UserIdTextField(

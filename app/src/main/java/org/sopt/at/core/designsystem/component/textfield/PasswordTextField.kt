@@ -18,7 +18,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.at.R
-import org.sopt.at.core.designsystem.component.textfield.SoptValidator.isPasswordFormat
+import org.sopt.at.core.util.validation.SoptValidator.isPasswordFormat
 
 @Composable
 fun PasswordTextField(

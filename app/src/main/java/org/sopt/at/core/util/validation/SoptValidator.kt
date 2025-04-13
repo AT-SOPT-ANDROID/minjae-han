@@ -1,4 +1,4 @@
-package org.sopt.at.core.designsystem.component.textfield
+package org.sopt.at.core.util.validation
 
 object SoptValidator {
     private val userIdPattern = "^[a-z0-9]+$".toRegex()
