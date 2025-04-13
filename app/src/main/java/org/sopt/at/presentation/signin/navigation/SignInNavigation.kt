@@ -18,15 +18,15 @@ fun NavController.navigateToSignIn(
 fun NavGraphBuilder.signInNavGraph(
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
-    navigateToHome: () -> Unit,
-    navigateToSignUp: () -> Unit
+    navigateToMyPage: () -> Unit,
+    navigateToSignUpId: () -> Unit
 ) {
     composable<SignIn> {
         SignInRoute(
             paddingValues = paddingValues,
             onBackClick = navigateUp,
-            onSignUpClick = navigateToSignUp,
-            onSignInClick = navigateToHome
+            onSignUpClick = navigateToSignUpId,
+            onSignInClick = navigateToMyPage
         )
     }
 }

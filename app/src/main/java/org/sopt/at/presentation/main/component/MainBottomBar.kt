@@ -79,8 +79,6 @@ private fun RowScope.MainBottomBarItem(
     selected: Boolean,
     onClick: () -> Unit
 ) {
-
-
     Column(
         modifier = Modifier
             .noRippleClickable(onClick = onClick)

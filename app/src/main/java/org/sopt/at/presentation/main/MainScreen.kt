@@ -1,6 +1,8 @@
 import android.app.Activity
 import android.content.Context
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -11,7 +13,10 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.delay
@@ -71,7 +76,8 @@ fun MainScreen(
                     currentTab = navigator.currentTab,
                     onTabSelected = navigator::navigate
                 )
-            }
+            },
+            modifier = Modifier.background(Color.Black)
         ) { paddingValues ->
             NavHost(
                 navController = navigator.navController,
@@ -79,26 +85,26 @@ fun MainScreen(
             ) {
                 signInNavGraph(
                     paddingValues = paddingValues,
-                    navigateUp = { },
-                    navigateToHome = { },
-                    navigateToSignUp = { }
+                    navigateUp = navigator::navigateUp,
+                    navigateToMyPage = navigator::navigateToMyPage,
+                    navigateToSignUpId = navigator::navigateToSignUpId
                 )
                 signUpIdNavGraph(
                     paddingValues = paddingValues,
-                    navigateUp = { },
-                    navigateToSignUpPassword = { },
+                    navigateUp = navigator::navigateUp,
+                    navigateToSignUpPassword = navigator::navigateToSignUpPassword
                 )
                 signUpPasswordNavGraph(
                     paddingValues = paddingValues,
-                    navigateUp = { },
-                    navigateToSignIn = { navigator.navigateToSignIn() }
+                    navigateUp = navigator::navigateUp,
+                    navigateToSignIn = navigator::navigateToSignIn
                 )
                 myPageNavGraph(
                     paddingValues = paddingValues,
-                    navigateUp = { },
+                    navigateUp = navigator::navigateUp,
                     navigateToNotification = { },
                     navigateToSetting = { },
-                    navigateToSignIn = { navigator.navigateToSignIn() }
+                    navigateToSignIn = navigator::navigateToSignIn
                 )
             }
         }

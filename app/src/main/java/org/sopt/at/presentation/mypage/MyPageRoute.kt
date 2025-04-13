@@ -56,7 +56,8 @@ fun MyPageScreen(
         modifier
             .fillMaxSize()
             .background(Color.Black)
-            .padding(paddingValues),
+            .padding(paddingValues)
+            .padding(20.dp),
         verticalArrangement = Arrangement.Top
     ) {
         MyPageTopAppBar(

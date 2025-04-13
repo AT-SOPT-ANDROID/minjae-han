@@ -1,5 +1,7 @@
 package org.sopt.at.presentation.signup.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -21,7 +23,20 @@ fun NavGraphBuilder.signUpIdNavGraph(
     navigateUp: () -> Unit,
     navigateToSignUpPassword: () -> Unit
 ) {
-    composable<SignUpId> {
+    composable<SignUpId>(
+        enterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Right,
+                animationSpec = tween(500)
+            )
+        },
+        exitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = tween(500)
+            )
+        }
+    ) {
         SignUpIdRoute(
             paddingValues = paddingValues,
             onBackClick = navigateUp,
@@ -41,7 +56,20 @@ fun NavGraphBuilder.signUpPasswordNavGraph(
     navigateUp: () -> Unit,
     navigateToSignIn: () -> Unit
 ) {
-    composable<SignUpPassword> {
+    composable<SignUpPassword>(
+        enterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = tween(500)
+            )
+        },
+        exitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.Right,
+                animationSpec = tween(500)
+            )
+        }
+    ) {
         SignUpPasswordRoute(
             paddingValues = paddingValues,
             onBackClick = navigateUp,

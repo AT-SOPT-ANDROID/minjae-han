@@ -16,7 +16,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -29,6 +32,7 @@ import org.sopt.at.core.designsystem.component.button.BasicButton
 import org.sopt.at.core.designsystem.component.textfield.PasswordTextField
 import org.sopt.at.core.designsystem.component.textfield.UserIdTextField
 import org.sopt.at.core.designsystem.component.topbar.BasicTopBar
+import org.sopt.at.core.util.extension.addFocusCleaner
 import org.sopt.at.presentation.signin.component.MenuList
 
 @Composable
@@ -65,11 +69,15 @@ fun SignInScreen(
     onSignUpClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val focusManager = LocalFocusManager.current
+
     Column(
         modifier = modifier
             .fillMaxSize()
+            .addFocusCleaner(focusManager)
             .background(Color.Black)
-            .padding(paddingValues),
+            .padding(paddingValues)
+            .padding(20.dp),
         verticalArrangement = Arrangement.Top
     ) {
         BasicTopBar(onBackClick = onBackClick)
@@ -87,7 +95,10 @@ fun SignInScreen(
         UserIdTextField(
             value = userId,
             placeholder = "아이디",
-            onValueChanged = onUserIdChanged
+            onValueChanged = onUserIdChanged,
+            onDoneAction = {
+                focusManager.moveFocus(FocusDirection.Next)
+            }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
