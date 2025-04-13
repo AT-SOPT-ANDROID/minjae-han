@@ -1,4 +1,4 @@
-package org.sopt.at.ui.theme
+package org.sopt.at.core.designsystem.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

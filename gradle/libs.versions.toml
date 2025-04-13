@@ -34,7 +34,7 @@ okhttp = "4.12.0"
 retrofit = "2.11.0"
 retrofitKotlinSerializationConverter = "1.0.0"
 kotlinxSerializationJson = "1.8.1"
-daggerHilt = "2.56.1"
+daggerHilt = "2.51"
 hiltNavigationCompose = "1.2.0"
 coil = "2.7.0"
 coroutine = "1.10.1"
@@ -114,9 +114,7 @@ androidx = [
     "androidx-ui-graphics",
     "androidx-ui-tooling-preview",
     "androidx-material3",
-    "androidx-navigation",
-    "androidx-security",
-    "androidx-appcompat"
+    "androidx-navigation"
 ]
 
 test = [

@@ -10,6 +10,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -19,28 +23,32 @@ import org.sopt.at.presentation.mypage.component.MyPageTopAppBar
 
 @Composable
 fun MyPageRoute(
-    userId: String,
     paddingValues: PaddingValues,
     onBackClick: () -> Unit,
     onNotificationClick: () -> Unit,
-    onSettingClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onSignOutClick: () -> Unit,
+    onSettingClick: () -> Unit
 ) {
+    var userId by remember { mutableStateOf("") }
+
     MyPageScreen(
         onBackClick = onBackClick,
         userId = userId,
         onNotificationClick = onNotificationClick,
         onSettingClick = onSettingClick,
-        modifier = modifier.padding(paddingValues)
+        onSignOutClick = onSignOutClick,
+        paddingValues = paddingValues
     )
 }
 
 @Composable
 fun MyPageScreen(
+    paddingValues: PaddingValues,
     onBackClick: () -> Unit,
     userId: String,
     onNotificationClick: () -> Unit,
     onSettingClick: () -> Unit,
+    onSignOutClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -48,7 +56,7 @@ fun MyPageScreen(
         modifier
             .fillMaxSize()
             .background(Color.Black)
-            .padding(20.dp),
+            .padding(paddingValues),
         verticalArrangement = Arrangement.Top
     ) {
         MyPageTopAppBar(
@@ -69,7 +77,7 @@ fun MyPageScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         BasicButton(
-            onClick = {},
+            onClick = onSignOutClick,
             enabled = true,
             buttonText = "로그아웃",
             borderColor = Color.DarkGray,
