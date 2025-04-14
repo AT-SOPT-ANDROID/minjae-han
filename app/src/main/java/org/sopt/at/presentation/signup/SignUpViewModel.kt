@@ -1,10 +1,9 @@
 package org.sopt.at.presentation.signup
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -16,7 +15,6 @@ import kotlinx.coroutines.launch
 import org.sopt.at.core.state.UiState
 import org.sopt.at.core.util.validation.SoptValidator
 import org.sopt.at.domain.repository.UserRepository
-import javax.inject.Inject
 
 sealed class SignUpSideEffect {
     data class ShowSnackbar(val message: String) : SignUpSideEffect()
@@ -26,17 +24,17 @@ sealed class SignUpSideEffect {
 class SignUpViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
-    
+
     private val _state: MutableStateFlow<SignUpState> = MutableStateFlow(SignUpState())
     val state: StateFlow<SignUpState>
         get() = _state.asStateFlow()
-    
+
     private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Empty)
     val uiState: StateFlow<UiState<Unit>> = _uiState.asStateFlow()
-    
+
     private val _sideEffect = MutableSharedFlow<SignUpSideEffect>()
     val sideEffect: SharedFlow<SignUpSideEffect> = _sideEffect.asSharedFlow()
-    
+
     fun updateUserId(id: String) {
         _state.update { currentState ->
             currentState.copy(
@@ -44,7 +42,7 @@ class SignUpViewModel @Inject constructor(
             )
         }
     }
-    
+
     fun updatePassword(password: String) {
         _state.update { currentState ->
             currentState.copy(
@@ -52,30 +50,30 @@ class SignUpViewModel @Inject constructor(
             )
         }
     }
-    
+
     fun isValidUserId(id: String): Boolean {
         return id.isNotBlank() && id.length in 6..12 && SoptValidator.isUserIdFormat(id)
     }
-    
+
     fun isValidPassword(password: String): Boolean {
         return password.isNotBlank() && password.length in 8..15 && SoptValidator.isPasswordFormat(password)
     }
-    
+
     fun saveUserCredentials() {
         viewModelScope.launch {
             if (!isValidUserId(_state.value.userId) || !isValidPassword(_state.value.password)) {
                 _sideEffect.emit(SignUpSideEffect.ShowSnackbar("아이디 또는 비밀번호가 유효하지 않습니다."))
                 return@launch
             }
-            
+
             _uiState.value = UiState.Loading
-            
+
             try {
                 userRepository.saveUserCredentials(
                     id = _state.value.userId,
                     password = _state.value.password
                 )
-                
+
                 _state.update { currentState ->
                     currentState.copy(isSignUpComplete = true)
                 }
@@ -87,7 +85,7 @@ class SignUpViewModel @Inject constructor(
             }
         }
     }
-    
+
     fun resetSignUpState() {
         _state.update { currentState ->
             currentState.copy(isSignUpComplete = false)

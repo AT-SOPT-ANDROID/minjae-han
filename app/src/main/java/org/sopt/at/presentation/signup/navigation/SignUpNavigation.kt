@@ -24,7 +24,7 @@ fun NavGraphBuilder.signUpNavGraph(
     navigateToSingIn: () -> Unit,
     navigateUp: () -> Unit
 ) {
-    composable<SignUp>{
+    composable<SignUp> {
         SignUpScreen(
             paddingValues = paddingValues,
             navigateToSingIn = navigateToSingIn,
@@ -40,24 +40,23 @@ fun NavGraphBuilder.signUpGraph(
     navigateUp: () -> Unit,
     navigateToSignIn: () -> Unit
 ) {
-    composable<SignUpId>{
+    composable<SignUpId> {
         SignUpIdRoute(
             viewModel = viewModel,
             paddingValues = paddingValues,
             onBackClick = navigateUp,
-            onNextClick = {navController.navigate(SignUpPassword)},
+            onNextClick = { navController.navigate(SignUpPassword) }
         )
     }
-    composable<SignUpPassword>{
+    composable<SignUpPassword> {
         SignUpPasswordRoute(
             viewModel = viewModel,
             paddingValues = paddingValues,
             onBackClick = navigateUp,
-            onNextClick = navigateToSignIn,
+            onNextClick = navigateToSignIn
         )
     }
 }
 
 @Serializable
 data object SignUp : Route
-

@@ -6,9 +6,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import org.sopt.at.data.repository.UserRepositoryImpl
 import org.sopt.at.domain.repository.UserRepository
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)

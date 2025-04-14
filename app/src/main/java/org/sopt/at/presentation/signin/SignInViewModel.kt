@@ -3,6 +3,7 @@ package org.sopt.at.presentation.signin
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -13,7 +14,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.sopt.at.core.state.UiState
 import org.sopt.at.domain.repository.UserRepository
-import javax.inject.Inject
 
 sealed class SignInSideEffect {
     data class ShowSnackbar(val message: String) : SignInSideEffect()
@@ -74,16 +74,15 @@ class SignInViewModel @Inject constructor(
     }
 
     private fun validateInput(id: String, password: String): Boolean {
-        return id.length >= MIN_ID_LENGTH && 
-               password.length >= MIN_PASSWORD_LENGTH &&
-               password.any { it.isDigit() } &&
-               password.any { it.isLetter() }
+        return id.length >= MIN_ID_LENGTH && password.length >= MIN_PASSWORD_LENGTH &&
+            password.any { it.isDigit() } &&
+            password.any { it.isLetter() }
     }
 
     fun signIn() {
         signIn(isAutoLogin = false)
     }
-    
+
     private fun signIn(isAutoLogin: Boolean) {
         if (!_state.value.isInputValid) {
             viewModelScope.launch {
@@ -91,12 +90,12 @@ class SignInViewModel @Inject constructor(
             }
             return
         }
-        
+
         viewModelScope.launch {
             if (!isAutoLogin) {
                 _uiState.value = UiState.Loading
             }
-            
+
             try {
                 val storedId = userRepository.getUserId().first()
                 val storedPassword = userRepository.getUserPassword().first()
@@ -115,7 +114,7 @@ class SignInViewModel @Inject constructor(
                 if (_state.value.userId == storedId && _state.value.password == storedPassword) {
                     _state.value = _state.value.copy(isSignInSuccessful = true)
                     _uiState.value = UiState.Success(Unit)
-                    
+
                     if (!isAutoLogin) {
                         // 수동 로그인 시에만 자동 로그인 활성화 및 메시지 표시
                         userRepository.saveUserCredentials(_state.value.userId, _state.value.password)

@@ -21,11 +21,16 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.sopt.at.core.designsystem.component.snackbar.AtSoptSnackbar
 import org.sopt.at.core.designsystem.event.LocalSnackBarTrigger
+import org.sopt.at.presentation.history.HistoryNavGraph
+import org.sopt.at.presentation.home.HomeNavGraph
+import org.sopt.at.presentation.live.LiveNavGraph
 import org.sopt.at.presentation.main.MainNavigator
 import org.sopt.at.presentation.main.MainTab
 import org.sopt.at.presentation.main.component.MainBottomBar
 import org.sopt.at.presentation.main.rememberMainNavigator
 import org.sopt.at.presentation.mypage.navigation.myPageNavGraph
+import org.sopt.at.presentation.search.SearchNavGraph
+import org.sopt.at.presentation.shorts.ShortsNavGraph
 import org.sopt.at.presentation.signin.navigation.signInNavGraph
 import org.sopt.at.presentation.signup.navigation.signUpNavGraph
 
@@ -83,7 +88,7 @@ fun MainScreen(
                 signInNavGraph(
                     paddingValues = paddingValues,
                     navigateUp = navigator::navigateUp,
-                    navigateToMyPage = navigator::navigateToMyPage,
+                    navigateToHome = navigator::navigateToHome,
                     navigateToSignUpId = navigator::navigateToSignUpId
                 )
                 signUpNavGraph(
@@ -98,6 +103,11 @@ fun MainScreen(
                     navigateToSetting = { },
                     navigateToSignIn = navigator::navigateToSignIn
                 )
+                HomeNavGraph()
+                ShortsNavGraph()
+                LiveNavGraph()
+                SearchNavGraph()
+                HistoryNavGraph()
             }
         }
     }

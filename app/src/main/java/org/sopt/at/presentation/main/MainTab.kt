@@ -15,8 +15,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import org.sopt.at.core.navigation.MainTabRoute
 import org.sopt.at.core.navigation.Route
+import org.sopt.at.presentation.history.History
+import org.sopt.at.presentation.home.Home
+import org.sopt.at.presentation.live.Live
 import org.sopt.at.presentation.main.MainTab.entries
-import org.sopt.at.presentation.mypage.navigation.MyPage
+import org.sopt.at.presentation.search.Search
+import org.sopt.at.presentation.shorts.Shorts
 
 enum class MainTab(
     val selectedIconResource: ImageVector,
@@ -28,31 +32,31 @@ enum class MainTab(
         selectedIconResource = Icons.Outlined.Home,
         unselectedIconResource = Icons.Filled.Home,
         label = "HOME",
-        route = MyPage
+        route = Home
     ),
     SHORTS(
         selectedIconResource = Icons.Outlined.PlayArrow,
         unselectedIconResource = Icons.Filled.PlayArrow,
         label = "Shorts",
-        route = MyPage
+        route = Shorts
     ),
     LIVE(
         selectedIconResource = Icons.Outlined.ThumbUp,
         unselectedIconResource = Icons.Filled.ThumbUp,
         label = "LIVE",
-        route = MyPage
+        route = Live
     ),
     SEARCH(
         selectedIconResource = Icons.Outlined.Search,
         unselectedIconResource = Icons.Filled.Search,
         label = "SEARCH",
-        route = MyPage
+        route = Search
     ),
     HISTORY(
         selectedIconResource = Icons.Outlined.Refresh,
         unselectedIconResource = Icons.Filled.Refresh,
         label = "HISTORY",
-        route = MyPage
+        route = History
     )
     ;
 

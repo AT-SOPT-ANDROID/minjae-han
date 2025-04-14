@@ -18,7 +18,7 @@ fun NavController.navigateToSignIn(
 fun NavGraphBuilder.signInNavGraph(
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
-    navigateToMyPage: () -> Unit,
+    navigateToHome: () -> Unit,
     navigateToSignUpId: () -> Unit
 ) {
     composable<SignIn> {
@@ -26,7 +26,7 @@ fun NavGraphBuilder.signInNavGraph(
             paddingValues = paddingValues,
             onBackClick = navigateUp,
             onSignUpClick = navigateToSignUpId,
-            onSignInClick = navigateToMyPage
+            onSignInClick = navigateToHome
         )
     }
 }

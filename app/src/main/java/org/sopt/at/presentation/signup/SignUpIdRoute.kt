@@ -21,7 +21,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import org.sopt.at.core.designsystem.component.button.BasicButton
@@ -38,7 +37,6 @@ fun SignUpIdRoute(
     onNextClick: () -> Unit,
     viewModel: SignUpViewModel
 ) {
-
     val lifecycleOwner = LocalLifecycleOwner.current
     val snackbarTrigger = LocalSnackBarTrigger.current
 

@@ -9,14 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import org.sopt.at.core.designsystem.event.LocalSnackBarTrigger
-import org.sopt.at.core.util.extension.imePadding
 import org.sopt.at.presentation.signup.navigation.SignUpId
 import org.sopt.at.presentation.signup.navigation.signUpGraph
 

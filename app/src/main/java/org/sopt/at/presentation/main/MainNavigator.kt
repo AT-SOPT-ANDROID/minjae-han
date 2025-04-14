@@ -8,7 +8,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import org.sopt.at.presentation.mypage.navigation.MyPage
+import org.sopt.at.presentation.history.navigateToHistory
+import org.sopt.at.presentation.home.navigateToHome
+import org.sopt.at.presentation.live.navigateToLive
+import org.sopt.at.presentation.search.navigateToSearch
+import org.sopt.at.presentation.shorts.navigateToShorts
 import org.sopt.at.presentation.signin.navigation.SignIn
 import org.sopt.at.presentation.signin.navigation.navigateToSignIn
 import org.sopt.at.presentation.signup.navigation.navigateToSignUp
@@ -49,11 +53,11 @@ class MainNavigator(
         }
 
         when (tab) {
-            MainTab.HOME -> navController
-            MainTab.LIVE -> navController
-            MainTab.SEARCH -> navController
-            MainTab.SHORTS -> navController
-            MainTab.HISTORY -> navController
+            MainTab.HOME -> navController.navigateToHome(navOptions)
+            MainTab.LIVE -> navController.navigateToLive(navOptions)
+            MainTab.SEARCH -> navController.navigateToSearch(navOptions)
+            MainTab.SHORTS -> navController.navigateToShorts(navOptions)
+            MainTab.HISTORY -> navController.navigateToHistory(navOptions)
         }
     }
 
@@ -66,15 +70,15 @@ class MainNavigator(
         navController.navigateUp()
     }
 
-    fun navigateToMyPage() {
-        navController.navigate(MyPage, clearStackOptions)
+    fun navigateToHome() {
+        navController.navigateToHome(clearStackOptions)
     }
 
     fun navigateToSignIn() {
         navController.navigateToSignIn(clearStackOptions)
     }
 
-    fun navigateToSignUpId(){
+    fun navigateToSignUpId() {
         navController.navigateToSignUp()
     }
 
