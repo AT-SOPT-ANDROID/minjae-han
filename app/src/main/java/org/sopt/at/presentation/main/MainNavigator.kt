@@ -11,6 +11,7 @@ import androidx.navigation.navOptions
 import org.sopt.at.presentation.history.navigateToHistory
 import org.sopt.at.presentation.home.navigateToHome
 import org.sopt.at.presentation.live.navigateToLive
+import org.sopt.at.presentation.mypage.navigation.navigateToMyPage
 import org.sopt.at.presentation.search.navigateToSearch
 import org.sopt.at.presentation.shorts.navigateToShorts
 import org.sopt.at.presentation.signin.navigation.SignIn
@@ -72,6 +73,10 @@ class MainNavigator(
 
     fun navigateToHome() {
         navController.navigateToHome(clearStackOptions)
+    }
+
+    fun navigateToMyPage() {
+        navController.navigateToMyPage()
     }
 
     fun navigateToSignIn() {
