@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import org.sopt.at.core.state.UiState
 import org.sopt.at.core.util.validation.SoptValidator
 import org.sopt.at.domain.repository.UserRepository
+import org.sopt.at.presentation.signup.model.SignUpState
 
 sealed class SignUpSideEffect {
     data class ShowSnackbar(val message: String) : SignUpSideEffect()
@@ -30,10 +31,12 @@ class SignUpViewModel @Inject constructor(
         get() = _state.asStateFlow()
 
     private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Empty)
-    val uiState: StateFlow<UiState<Unit>> = _uiState.asStateFlow()
+    val uiState: StateFlow<UiState<Unit>>
+        get() = _uiState.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<SignUpSideEffect>()
-    val sideEffect: SharedFlow<SignUpSideEffect> = _sideEffect.asSharedFlow()
+    val sideEffect: SharedFlow<SignUpSideEffect> 
+        get() = _sideEffect.asSharedFlow()
 
     fun updateUserId(id: String) {
         _state.update { currentState ->

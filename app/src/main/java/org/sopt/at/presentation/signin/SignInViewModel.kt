@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.sopt.at.core.state.UiState
 import org.sopt.at.domain.repository.UserRepository
+import org.sopt.at.presentation.signin.model.SignInState
 
 sealed class SignInSideEffect {
     data class ShowSnackbar(val message: String) : SignInSideEffect()

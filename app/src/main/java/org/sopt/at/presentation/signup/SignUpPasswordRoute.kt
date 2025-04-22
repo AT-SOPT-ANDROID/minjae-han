@@ -71,7 +71,7 @@ fun SignUpPasswordRoute(
 }
 
 @Composable
-fun SignUpPasswordScreen(
+private fun SignUpPasswordScreen(
     paddingValues: PaddingValues,
     onBackClick: () -> Unit,
     password: String,

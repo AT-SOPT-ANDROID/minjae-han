@@ -19,7 +19,7 @@ import org.sopt.at.presentation.signup.navigation.SignUpId
 import org.sopt.at.presentation.signup.navigation.signUpGraph
 
 @Composable
-fun SignUpScreen(
+fun MainSignUpScreen(
     paddingValues: PaddingValues,
     navigateToSingIn: () -> Unit,
     navigateUp: () -> Unit,

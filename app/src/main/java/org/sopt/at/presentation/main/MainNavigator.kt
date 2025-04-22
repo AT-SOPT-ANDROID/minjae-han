@@ -9,7 +9,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import org.sopt.at.presentation.history.navigateToHistory
-import org.sopt.at.presentation.home.navigateToHome
+import org.sopt.at.presentation.home.navigation.navigateToHome
 import org.sopt.at.presentation.live.navigateToLive
 import org.sopt.at.presentation.mypage.navigation.navigateToMyPage
 import org.sopt.at.presentation.search.navigateToSearch
@@ -35,7 +35,7 @@ class MainNavigator(
         }
 
     val clearStackOptions = navOptions {
-        popUpTo(0) {
+        popUpTo(NAVIGATION_ROOT) {
             inclusive = true
         }
         launchSingleTop = true
@@ -85,10 +85,6 @@ class MainNavigator(
 
     fun navigateToSignUpId() {
         navController.navigateToSignUp()
-    }
-
-    inline fun isCurrentDestination(destination: NavDestination): Boolean {
-        return navController.currentDestination == destination
     }
 }
 

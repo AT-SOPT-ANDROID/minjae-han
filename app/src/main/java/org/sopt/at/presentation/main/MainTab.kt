@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import org.sopt.at.core.navigation.MainTabRoute
 import org.sopt.at.core.navigation.Route
 import org.sopt.at.presentation.history.History
-import org.sopt.at.presentation.home.Home
+import org.sopt.at.presentation.home.navigation.Home
 import org.sopt.at.presentation.live.Live
 import org.sopt.at.presentation.main.MainTab.entries
 import org.sopt.at.presentation.search.Search

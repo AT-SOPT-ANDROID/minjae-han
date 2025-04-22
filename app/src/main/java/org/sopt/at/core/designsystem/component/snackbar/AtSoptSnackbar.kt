@@ -32,7 +32,7 @@ fun AtSoptSnackbar(
                 .fillMaxWidth()
                 .padding(vertical = 12.dp, horizontal = 8.dp),
             textAlign = TextAlign.Center,
-            color = Color.White
+            color = Color.Black
         )
     }
 }

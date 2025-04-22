@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 import org.sopt.at.core.navigation.Route
 import org.sopt.at.presentation.signup.SignUpIdRoute
 import org.sopt.at.presentation.signup.SignUpPasswordRoute
-import org.sopt.at.presentation.signup.SignUpScreen
+import org.sopt.at.presentation.signup.MainSignUpScreen
 import org.sopt.at.presentation.signup.SignUpViewModel
 
 fun NavController.navigateToSignUp(
@@ -25,7 +25,7 @@ fun NavGraphBuilder.signUpNavGraph(
     navigateUp: () -> Unit
 ) {
     composable<SignUp> {
-        SignUpScreen(
+        MainSignUpScreen(
             paddingValues = paddingValues,
             navigateToSingIn = navigateToSingIn,
             navigateUp = navigateUp

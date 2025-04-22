@@ -1,4 +1,4 @@
-package org.sopt.at.presentation.signin
+package org.sopt.at.presentation.signin.model
 
 data class SignInState(
     val userId: String = "",

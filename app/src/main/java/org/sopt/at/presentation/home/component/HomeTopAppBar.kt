@@ -45,7 +45,8 @@ fun HomeTopAppBar(
             contentDescription = "Broadcast",
             modifier = Modifier
                 .clickable(onClick = onBroadCastClick)
-                .size(24.dp)
+                .size(24.dp),
+            tint = Color.Unspecified
         )
 
         Spacer(modifier = Modifier.width(20.dp))
