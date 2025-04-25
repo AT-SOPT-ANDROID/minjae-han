@@ -78,7 +78,7 @@ private fun HomeScreen(
 
         SubTitleText(text = "지금 방영 중인 콘텐츠")
 
-        HomeImageBanner(contentList = topContent, showPosition = false)
+        HomeImageBanner(contentList = topContent, showRank = false)
     }
 }
 

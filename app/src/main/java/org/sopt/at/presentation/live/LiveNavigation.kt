@@ -13,7 +13,7 @@ fun NavController.navigateToLive(
     navigate(Live, navOptions)
 }
 
-fun NavGraphBuilder.LiveNavGraph() {
+fun NavGraphBuilder.liveNavGraph() {
     composable<Live> {
         LiveRoute()
     }

@@ -23,7 +23,7 @@ import org.sopt.at.core.designsystem.component.snackbar.AtSoptSnackbar
 import org.sopt.at.core.designsystem.event.LocalSnackBarTrigger
 import org.sopt.at.presentation.history.HistoryNavGraph
 import org.sopt.at.presentation.home.navigation.homeNavGraph
-import org.sopt.at.presentation.live.LiveNavGraph
+import org.sopt.at.presentation.live.liveNavGraph
 import org.sopt.at.presentation.main.MainNavigator
 import org.sopt.at.presentation.main.MainTab
 import org.sopt.at.presentation.main.component.MainBottomBar
@@ -108,7 +108,7 @@ fun MainScreen(
                     navigateToMyPage = navigator::navigateToMyPage
                 )
                 ShortsNavGraph()
-                LiveNavGraph()
+                liveNavGraph()
                 SearchNavGraph()
                 HistoryNavGraph()
             }

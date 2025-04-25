@@ -38,7 +38,7 @@ data class ContentList(
 fun HomeImageBanner(
     contentList: ImmutableList<ContentList>,
     modifier: Modifier = Modifier,
-    showPosition: Boolean = true
+    showRank: Boolean = true
 ) {
     LazyRow(
         modifier = modifier.fillMaxWidth(),
@@ -49,7 +49,7 @@ fun HomeImageBanner(
             BannerItem(
                 content = content,
                 position = index + 1,
-                showPosition = showPosition
+                showRank = showRank
             )
         }
     }
@@ -59,13 +59,13 @@ fun HomeImageBanner(
 private fun BannerItem(
     content: ContentList,
     position: Int,
-    showPosition: Boolean,
+    showRank: Boolean,
     modifier: Modifier = Modifier
 ) {
     Row(
         verticalAlignment = Alignment.Bottom
     ) {
-        if (showPosition) {
+        if (showRank) {
             Text(
                 text = "$position",
                 color = Color.White,
