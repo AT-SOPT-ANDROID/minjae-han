@@ -45,7 +45,10 @@ fun HomeImageBanner(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
-        itemsIndexed(contentList) { index, content ->
+        itemsIndexed(
+            items = contentList,
+            key = { _, item -> item.imageRes }
+        ) { index, content ->
             BannerItem(
                 content = content,
                 position = index + 1,
