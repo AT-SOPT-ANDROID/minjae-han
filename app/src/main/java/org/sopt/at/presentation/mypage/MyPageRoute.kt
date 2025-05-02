@@ -10,13 +10,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.sopt.at.core.designsystem.component.button.BasicButton
 import org.sopt.at.presentation.mypage.component.MyPageTopAppBar
 
@@ -29,7 +29,7 @@ fun MyPageRoute(
     onSettingClick: () -> Unit,
     viewModel: MyPageViewModel = hiltViewModel()
 ) {
-    val userId by viewModel.userId.collectAsState()
+    val userId by viewModel.userId.collectAsStateWithLifecycle()
 
     MyPageScreen(
         onBackClick = onBackClick,

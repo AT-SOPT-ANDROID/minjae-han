@@ -12,8 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import org.sopt.at.core.designsystem.component.button.BasicButton
 import org.sopt.at.core.designsystem.component.textfield.PasswordTextField
@@ -46,8 +48,8 @@ fun SignInRoute(
     onSignInClick: () -> Unit,
     viewModel: SignInViewModel = hiltViewModel()
 ) {
-    val state by viewModel.state.collectAsState()
-    val uiState by viewModel.uiState.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
     val snackbarTrigger = LocalSnackBarTrigger.current
 
@@ -94,6 +96,15 @@ fun SignInScreen(
     modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
+    val buttonColors = remember {
+        derivedStateOf {
+            Triple(
+                if (isButtonEnabled) Color.White else Color.DarkGray,
+                if (isButtonEnabled) Color.Black else Color.White,
+                if (isButtonEnabled) Color.White else Color.DarkGray
+            )
+        }
+    }
 
     Column(
         modifier = modifier
@@ -139,9 +150,9 @@ fun SignInScreen(
             onClick = onSignInClick,
             enabled = isButtonEnabled,
             buttonText = "로그인 하기",
-            borderColor = if (isButtonEnabled) Color.White else Color.DarkGray,
-            textColor = if (isButtonEnabled) Color.Black else Color.White,
-            backgroundColor = if (isButtonEnabled) Color.White else Color.DarkGray
+            borderColor = buttonColors.value.first,
+            textColor = buttonColors.value.second,
+            backgroundColor = buttonColors.value.third
         )
 
         Spacer(modifier = Modifier.height(20.dp))

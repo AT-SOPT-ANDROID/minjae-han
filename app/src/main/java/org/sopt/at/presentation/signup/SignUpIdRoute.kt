@@ -11,8 +11,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import org.sopt.at.core.designsystem.component.button.BasicButton
 import org.sopt.at.core.designsystem.component.textfield.UserIdTextField
@@ -50,7 +52,7 @@ fun SignUpIdRoute(
         }
     }
 
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
     val isButtonEnabled = viewModel.isValidUserId(state.userId)
 
     SignUpIdScreen(
@@ -75,6 +77,15 @@ fun SignUpIdScreen(
 ) {
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
+    val buttonColors = remember {
+        derivedStateOf {
+            Triple(
+                if (isButtonEnabled) Color.White else Color.LightGray,
+                Color.White,
+                if (isButtonEnabled) Color.Gray else Color.Black
+            )
+        }
+    }
 
     Column(
         modifier = modifier
@@ -127,9 +138,9 @@ fun SignUpIdScreen(
             onClick = onNextClick,
             enabled = isButtonEnabled,
             buttonText = "다음",
-            borderColor = if (isButtonEnabled) Color.White else Color.LightGray,
-            textColor = Color.White,
-            backgroundColor = if (isButtonEnabled) Color.Gray else Color.Black
+            borderColor = buttonColors.value.first,
+            textColor = buttonColors.value.second,
+            backgroundColor = buttonColors.value.third
         )
     }
 }
