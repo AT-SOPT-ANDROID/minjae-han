@@ -10,37 +10,48 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import org.sopt.at.core.designsystem.component.button.BasicButton
 import org.sopt.at.presentation.mypage.component.MyPageTopAppBar
 
 @Composable
 fun MyPageRoute(
-    userId: String,
     paddingValues: PaddingValues,
     onBackClick: () -> Unit,
     onNotificationClick: () -> Unit,
+    onSignOutClick: () -> Unit,
     onSettingClick: () -> Unit,
-    modifier: Modifier = Modifier
+    viewModel: MyPageViewModel = hiltViewModel()
 ) {
+    val userId by viewModel.userId.collectAsState()
+
     MyPageScreen(
         onBackClick = onBackClick,
-        userId = userId,
+        userId = userId ?: "",
         onNotificationClick = onNotificationClick,
         onSettingClick = onSettingClick,
-        modifier = modifier.padding(paddingValues)
+        onSignOutClick = {
+            viewModel.signOut()
+            onSignOutClick()
+        },
+        paddingValues = paddingValues
     )
 }
 
 @Composable
 fun MyPageScreen(
+    paddingValues: PaddingValues,
     onBackClick: () -> Unit,
     userId: String,
     onNotificationClick: () -> Unit,
     onSettingClick: () -> Unit,
+    onSignOutClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -48,6 +59,7 @@ fun MyPageScreen(
         modifier
             .fillMaxSize()
             .background(Color.Black)
+            .padding(paddingValues)
             .padding(20.dp),
         verticalArrangement = Arrangement.Top
     ) {
@@ -69,7 +81,7 @@ fun MyPageScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         BasicButton(
-            onClick = {},
+            onClick = onSignOutClick,
             enabled = true,
             buttonText = "로그아웃",
             borderColor = Color.DarkGray,

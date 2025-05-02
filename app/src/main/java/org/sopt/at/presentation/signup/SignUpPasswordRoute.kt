@@ -1,7 +1,6 @@
-package org.sopt.at.presentation.signin
+package org.sopt.at.presentation.signup
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -15,36 +14,28 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import org.sopt.at.core.designsystem.component.button.BasicButton
 import org.sopt.at.core.designsystem.component.textfield.PasswordTextField
-import org.sopt.at.core.designsystem.component.textfield.UserIdTextField
 import org.sopt.at.core.designsystem.component.topbar.BasicTopBar
 import org.sopt.at.core.designsystem.event.LocalSnackBarTrigger
 import org.sopt.at.core.state.UiState
 import org.sopt.at.core.util.extension.addFocusCleaner
-import org.sopt.at.presentation.signin.component.MenuList
+import org.sopt.at.core.util.extension.imePadding
 
 @Composable
-fun SignInRoute(
+fun SignUpPasswordRoute(
     paddingValues: PaddingValues,
     onBackClick: () -> Unit,
-    onSignUpClick: () -> Unit,
-    onSignInClick: () -> Unit,
-    viewModel: SignInViewModel = hiltViewModel()
+    onNextClick: () -> Unit,
+    viewModel: SignUpViewModel
 ) {
     val state by viewModel.state.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
@@ -54,7 +45,7 @@ fun SignInRoute(
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect { effect ->
             when (effect) {
-                is SignInSideEffect.ShowSnackbar -> {
+                is SignUpSideEffect.ShowSnackbar -> {
                     snackbarTrigger(effect.message)
                 }
             }
@@ -63,33 +54,29 @@ fun SignInRoute(
 
     LaunchedEffect(uiState) {
         if (uiState is UiState.Success) {
-            onSignInClick()
+            onNextClick()
         }
     }
 
-    SignInScreen(
+    val isButtonEnabled = viewModel.isValidPassword(state.password)
+
+    SignUpPasswordScreen(
         onBackClick = onBackClick,
-        userId = state.userId,
-        onUserIdChanged = viewModel::updateUserId,
-        userPassword = state.password,
+        password = state.password,
         onPasswordChanged = viewModel::updatePassword,
-        onSignInClick = viewModel::signIn,
-        onSignUpClick = onSignUpClick,
-        isButtonEnabled = state.isInputValid,
+        onNextClick = viewModel::saveUserCredentials,
+        isButtonEnabled = isButtonEnabled,
         paddingValues = paddingValues
     )
 }
 
 @Composable
-fun SignInScreen(
+private fun SignUpPasswordScreen(
     paddingValues: PaddingValues,
     onBackClick: () -> Unit,
-    userId: String,
-    onUserIdChanged: (String) -> Unit,
-    userPassword: String,
+    password: String,
     onPasswordChanged: (String) -> Unit,
-    onSignInClick: () -> Unit,
-    onSignUpClick: () -> Unit,
+    onNextClick: () -> Unit,
     isButtonEnabled: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -98,76 +85,52 @@ fun SignInScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .addFocusCleaner(focusManager)
             .background(Color.Black)
+            .addFocusCleaner(focusManager)
             .padding(paddingValues)
-            .padding(20.dp),
-        verticalArrangement = Arrangement.Top
+            .padding(20.dp)
+            .imePadding()
     ) {
         BasicTopBar(onBackClick = onBackClick)
 
         Spacer(modifier = Modifier.height(40.dp))
 
         Text(
-            text = "TVING ID 로그인",
+            text = "비밀번호를 입력해주세요.",
             fontSize = 28.sp,
             color = Color.White,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(20.dp))
 
-        UserIdTextField(
-            value = userId,
-            placeholder = "아이디",
-            onValueChanged = onUserIdChanged,
-            onDoneAction = {
-                focusManager.moveFocus(FocusDirection.Next)
-            }
+        PasswordTextField(
+            value = password,
+            onValueChanged = onPasswordChanged,
+            placeholder = "비밀번호",
+            modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        PasswordTextField(
-            value = userPassword,
-            placeholder = "비밀번호",
-            onValueChanged = onPasswordChanged
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        BasicButton(
-            onClick = onSignInClick,
-            enabled = isButtonEnabled,
-            buttonText = "로그인 하기",
-            borderColor = if (isButtonEnabled) Color.White else Color.DarkGray,
-            textColor = if (isButtonEnabled) Color.Black else Color.White,
-            backgroundColor = if (isButtonEnabled) Color.White else Color.DarkGray
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        MenuList(onSignUpClick = onSignUpClick)
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        val annotatedText = buildAnnotatedString {
-            append("이 사이트는 Google reCAPTCHA로 보호되며,\n")
-            withStyle(style = SpanStyle(textDecoration = TextDecoration.Underline)) {
-                append("Google 개인정보 처리방침")
-            }
-            append("과 ")
-            withStyle(style = SpanStyle(textDecoration = TextDecoration.Underline)) {
-                append("서비스 약관")
-            }
-            append("이 적용됩니다.\n")
-        }
-
         Text(
-            text = annotatedText,
+            text = "영문, 숫자, 특수문자(~!@#$%^&*) 조합 8 ~ 15자리",
             fontSize = 12.sp,
             color = Color.Gray,
-            textAlign = TextAlign.Center,
+            textAlign = TextAlign.Start,
             modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        BasicButton(
+            onClick = onNextClick,
+            enabled = isButtonEnabled,
+            buttonText = "다음",
+            borderColor = if (isButtonEnabled) Color.White else Color.LightGray,
+            textColor = Color.White,
+            backgroundColor = if (isButtonEnabled) Color.Gray else Color.Black
         )
     }
 }
