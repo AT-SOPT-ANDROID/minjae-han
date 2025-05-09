@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.sopt.at.core.state.UiState
 import org.sopt.at.core.util.validation.SoptValidator
+import org.sopt.at.domain.repository.AuthRepository
 import org.sopt.at.domain.repository.DataStoreRepository
 import org.sopt.at.presentation.signup.model.SignUpState
 
@@ -23,7 +24,8 @@ sealed class SignUpSideEffect {
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<SignUpState> = MutableStateFlow(SignUpState())
@@ -35,7 +37,7 @@ class SignUpViewModel @Inject constructor(
         get() = _uiState.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<SignUpSideEffect>()
-    val sideEffect: SharedFlow<SignUpSideEffect> 
+    val sideEffect: SharedFlow<SignUpSideEffect>
         get() = _sideEffect.asSharedFlow()
 
     fun updateUserId(id: String) {
@@ -54,8 +56,18 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
+    fun updateNickname(nickname: String) {
+        _state.update {
+            it.copy(nickname = nickname)
+        }
+    }
+
     fun isValidUserId(id: String): Boolean {
         return id.isNotBlank() && id.length in 6..12 && SoptValidator.isUserIdFormat(id)
+    }
+
+    fun isValidNickname(nickname: String): Boolean {
+        return nickname.isNotBlank() && nickname.length in 1..20
     }
 
     fun isValidPassword(password: String): Boolean {
@@ -68,23 +80,24 @@ class SignUpViewModel @Inject constructor(
                 _sideEffect.emit(SignUpSideEffect.ShowSnackbar("아이디 또는 비밀번호가 유효하지 않습니다."))
                 return@launch
             }
-
             _uiState.value = UiState.Loading
-
-            try {
-                dataStoreRepository.saveUserCredentials(
-                    id = _state.value.userId,
-                    password = _state.value.password
-                )
-
+            authRepository.signUp(
+                loginId = _state.value.userId,
+                password = _state.value.password,
+                nickname = _state.value.nickname
+            ).onSuccess {
                 _state.update { currentState ->
                     currentState.copy(isSignUpComplete = true)
                 }
+                _sideEffect.emit(
+                    SignUpSideEffect.ShowSnackbar("회원가입 성공!!!!!")
+                )
                 _uiState.value = UiState.Success(Unit)
-                _sideEffect.emit(SignUpSideEffect.ShowSnackbar("회원가입이 완료되었습니다."))
-            } catch (e: Exception) {
-                _uiState.value = UiState.Failure("회원가입 중 오류가 발생했습니다.")
-                _sideEffect.emit(SignUpSideEffect.ShowSnackbar("회원가입 중 오류가 발생했습니다."))
+            }.onFailure {
+                _sideEffect.emit(
+                    SignUpSideEffect.ShowSnackbar("회원가입 실패!!!!!")
+                )
+                _uiState.value = UiState.Failure("")
             }
         }
     }
