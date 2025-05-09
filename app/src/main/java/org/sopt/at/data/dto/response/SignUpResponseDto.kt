@@ -8,5 +8,5 @@ data class SignUpResponseDto(
     @SerialName("userId")
     val userId: Int,
     @SerialName("nickname")
-    val nickname: String,
+    val nickname: String
 )

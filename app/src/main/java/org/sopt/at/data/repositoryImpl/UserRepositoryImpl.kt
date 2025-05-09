@@ -1,10 +1,10 @@
 package org.sopt.at.data.repositoryImpl
 
+import javax.inject.Inject
 import org.sopt.at.data.datasource.UserRemoteDataSource
 import org.sopt.at.data.mapper.toDomain
 import org.sopt.at.domain.entity.UserEntity
 import org.sopt.at.domain.repository.UserRepository
-import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
     private val userDataSource: UserRemoteDataSource

@@ -13,7 +13,6 @@ object SoptValidator {
         return input.matches(userIdPattern)
     }
 
-
     fun isNicknameFormat(input: String): Boolean {
         return input.matches(nicknamePattern)
     }

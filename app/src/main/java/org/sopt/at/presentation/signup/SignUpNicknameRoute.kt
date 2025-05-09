@@ -27,12 +27,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import org.sopt.at.core.designsystem.component.button.BasicButton
 import org.sopt.at.core.designsystem.component.textfield.NicknameTextField
-import org.sopt.at.core.designsystem.component.textfield.UserIdTextField
 import org.sopt.at.core.designsystem.component.topbar.BasicTopBar
 import org.sopt.at.core.designsystem.event.LocalSnackBarTrigger
 import org.sopt.at.core.util.extension.addFocusCleaner
 import org.sopt.at.core.util.extension.imePadding
-
 
 @Composable
 fun SignUpNicknameRoute(
@@ -66,8 +64,6 @@ fun SignUpNicknameRoute(
         paddingValues = paddingValues
     )
 }
-
-
 
 @Composable
 private fun SignUpNicknameScreen(

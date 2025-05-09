@@ -12,6 +12,6 @@ interface AuthRepository {
 
     suspend fun signIn(
         loginId: String,
-        password: String,
+        password: String
     ): Result<SignInEntity>
 }

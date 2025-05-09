@@ -1,13 +1,12 @@
 package org.sopt.at.core.network
 
-
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import kotlinx.serialization.json.Json
-import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -17,8 +16,6 @@ import org.sopt.at.domain.repository.DataStoreRepository
 import retrofit2.Converter
 import retrofit2.Retrofit
 import timber.log.Timber
-import javax.inject.Singleton
-
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -73,8 +70,7 @@ object RetrofitModule {
 
     @Provides
     @Singleton
-    fun provideAuthInterceptor(dataStoreRepository: DataStoreRepository): AuthInterceptor = 
-        AuthInterceptor(dataStoreRepository)
+    fun provideAuthInterceptor(dataStoreRepository: DataStoreRepository): AuthInterceptor = AuthInterceptor(dataStoreRepository)
 
     @Provides
     @Singleton
