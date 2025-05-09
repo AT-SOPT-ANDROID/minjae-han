@@ -1,4 +1,4 @@
-package org.sopt.at.data.repository
+package org.sopt.at.data.repositoryImpl
 
 import android.content.Context
 import androidx.datastore.core.DataStore
