@@ -98,10 +98,21 @@ class SignInViewModel @Inject constructor(
             }
 
             try {
-                userRepository.signIn(
-                    loginId = _state.value.userId, 
-                    password = _state.value.password
-                ).onSuccess { userEntity ->
+                val storedId = userRepository.getUserId().first()
+                val storedPassword = userRepository.getUserPassword().first()
+
+                if (storedId == null || storedPassword == null) {
+                    // 첫 로그인인 경우 - 회원가입되어 있지 않음
+                    if (isAutoLogin) {
+                        // 자동로그인 시도였으나 저장된 정보가 없음
+                        return@launch
+                    }
+                    _uiState.value = UiState.Failure("저장된 사용자 정보가 없습니다. 회원가입이 필요합니다.")
+                    _sideEffect.emit(SignInSideEffect.ShowSnackbar("저장된 사용자 정보가 없습니다. 회원가입이 필요합니다."))
+                    return@launch
+                }
+
+                if (_state.value.userId == storedId && _state.value.password == storedPassword) {
                     _state.value = _state.value.copy(isSignInSuccessful = true)
                     _uiState.value = UiState.Success(Unit)
 
@@ -111,11 +122,13 @@ class SignInViewModel @Inject constructor(
                         userRepository.setAutoLogin(true)
                         _sideEffect.emit(SignInSideEffect.ShowSnackbar("로그인에 성공했습니다."))
                     }
-                }.onFailure { throwable ->
-                    if (!isAutoLogin) {
-                        _uiState.value = UiState.Failure(throwable.message ?: "로그인 중 오류가 발생했습니다.")
-                        _sideEffect.emit(SignInSideEffect.ShowSnackbar(throwable.message ?: "로그인 중 오류가 발생했습니다."))
+                } else {
+                    if (isAutoLogin) {
+                        // 자동로그인 실패 시 아무 메시지 표시하지 않음
+                        return@launch
                     }
+                    _uiState.value = UiState.Failure("아이디 또는 비밀번호가 일치하지 않습니다.")
+                    _sideEffect.emit(SignInSideEffect.ShowSnackbar("아이디 또는 비밀번호가 일치하지 않습니다."))
                 }
             } catch (e: Exception) {
                 if (!isAutoLogin) {

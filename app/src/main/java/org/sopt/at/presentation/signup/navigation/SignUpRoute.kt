@@ -8,6 +8,3 @@ data object SignUpId : Route
 
 @Serializable
 data object SignUpPassword : Route
-
-@Serializable
-data object SignUpNickname : Route
