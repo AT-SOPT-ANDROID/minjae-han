@@ -80,6 +80,7 @@ dependencies {
 
     // Debug
     debugImplementation(libs.bundles.debug)
+    implementation(libs.timber)
 }
 
 ktlint {
