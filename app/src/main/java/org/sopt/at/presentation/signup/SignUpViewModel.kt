@@ -53,6 +53,14 @@ class SignUpViewModel @Inject constructor(
             )
         }
     }
+    
+    fun updateNickname(nickname: String) {
+        _state.update { currentState ->
+            currentState.copy(
+                nickname = nickname
+            )
+        }
+    }
 
     fun isValidUserId(id: String): Boolean {
         return id.isNotBlank() && id.length in 6..12 && SoptValidator.isUserIdFormat(id)
@@ -61,27 +69,40 @@ class SignUpViewModel @Inject constructor(
     fun isValidPassword(password: String): Boolean {
         return password.isNotBlank() && password.length in 8..15 && SoptValidator.isPasswordFormat(password)
     }
+    
+    fun isValidNickname(nickname: String): Boolean {
+        return nickname.isNotBlank() && nickname.length in 1..20
+    }
 
     fun saveUserCredentials() {
         viewModelScope.launch {
-            if (!isValidUserId(_state.value.userId) || !isValidPassword(_state.value.password)) {
-                _sideEffect.emit(SignUpSideEffect.ShowSnackbar("아이디 또는 비밀번호가 유효하지 않습니다."))
+            if (!isValidUserId(_state.value.userId) || !isValidPassword(_state.value.password) || !isValidNickname(_state.value.nickname)) {
+                _sideEffect.emit(SignUpSideEffect.ShowSnackbar("입력 값이 유효하지 않습니다."))
                 return@launch
             }
 
             _uiState.value = UiState.Loading
 
             try {
-                userRepository.saveUserCredentials(
-                    id = _state.value.userId,
-                    password = _state.value.password
-                )
+                userRepository.signUp(
+                    loginId = _state.value.userId,
+                    password = _state.value.password,
+                    nickname = _state.value.nickname
+                ).onSuccess { userEntity ->
+                    userRepository.saveUserCredentials(
+                        id = _state.value.userId,
+                        password = _state.value.password
+                    )
 
-                _state.update { currentState ->
-                    currentState.copy(isSignUpComplete = true)
+                    _state.update { currentState ->
+                        currentState.copy(isSignUpComplete = true)
+                    }
+                    _uiState.value = UiState.Success(Unit)
+                    _sideEffect.emit(SignUpSideEffect.ShowSnackbar("회원가입이 완료되었습니다."))
+                }.onFailure { throwable ->
+                    _uiState.value = UiState.Failure(throwable.message ?: "회원가입 중 오류가 발생했습니다.")
+                    _sideEffect.emit(SignUpSideEffect.ShowSnackbar(throwable.message ?: "회원가입 중 오류가 발생했습니다."))
                 }
-                _uiState.value = UiState.Success(Unit)
-                _sideEffect.emit(SignUpSideEffect.ShowSnackbar("회원가입이 완료되었습니다."))
             } catch (e: Exception) {
                 _uiState.value = UiState.Failure("회원가입 중 오류가 발생했습니다.")
                 _sideEffect.emit(SignUpSideEffect.ShowSnackbar("회원가입 중 오류가 발생했습니다."))
