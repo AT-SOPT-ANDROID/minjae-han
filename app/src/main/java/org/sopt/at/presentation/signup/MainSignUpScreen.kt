@@ -15,7 +15,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import org.sopt.at.core.designsystem.event.LocalSnackBarTrigger
-import org.sopt.at.presentation.signup.navigation.SignUpId
+import org.sopt.at.presentation.signup.navigation.SignUpNickname
 import org.sopt.at.presentation.signup.navigation.signUpGraph
 
 @Composable
@@ -46,7 +46,7 @@ fun MainSignUpScreen(
     ) {
         NavHost(
             navController = navController,
-            startDestination = SignUpId,
+            startDestination = SignUpNickname,
             modifier = Modifier.weight(1f)
         ) {
             signUpGraph(

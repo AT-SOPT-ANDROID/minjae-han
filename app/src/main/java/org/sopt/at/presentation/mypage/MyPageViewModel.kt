@@ -7,12 +7,13 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.sopt.at.domain.repository.DataStoreRepository
 import org.sopt.at.domain.repository.UserRepository
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
+    private val dataStoreRepository: DataStoreRepository,
     private val userRepository: UserRepository
 ) : ViewModel() {
     private val _userId = MutableStateFlow<String?>(null)
@@ -24,15 +25,19 @@ class MyPageViewModel @Inject constructor(
 
     private fun loadUserData() {
         viewModelScope.launch {
-            userRepository.getUserId().collectLatest { userId ->
-                _userId.value = userId
-            }
+            userRepository.getUserNickName()
+                .onSuccess { response ->
+                    _userId.value = response.nickname
+                }
+                .onFailure {
+                    _userId.value = "불러오기 실패임"
+                }
         }
     }
 
     fun signOut() {
         viewModelScope.launch {
-            userRepository.setAutoLogin(false)
+            dataStoreRepository.setAutoLogin(false)
             _userId.value = null
         }
     }

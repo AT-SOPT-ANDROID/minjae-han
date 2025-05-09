@@ -1,3 +1,6 @@
+import java.util.Properties
+import kotlin.apply
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -6,6 +9,10 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktlint)
+}
+
+val properties = Properties().apply {
+    load(project.rootProject.file("local.properties").inputStream())
 }
 
 android {
@@ -20,6 +27,12 @@ android {
         versionName = libs.versions.versionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            "String",
+            "BASE_URL",
+            properties.getProperty("base.url")
+        )
     }
 
     buildTypes {
@@ -40,6 +53,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     composeOptions {
@@ -80,6 +94,7 @@ dependencies {
 
     // Debug
     debugImplementation(libs.bundles.debug)
+    implementation(libs.timber)
 }
 
 ktlint {

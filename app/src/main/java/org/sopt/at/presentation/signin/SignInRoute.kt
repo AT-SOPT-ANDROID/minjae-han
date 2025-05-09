@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -43,9 +43,9 @@ import org.sopt.at.presentation.signin.component.MenuList
 @Composable
 fun SignInRoute(
     paddingValues: PaddingValues,
-    onBackClick: () -> Unit,
-    onSignUpClick: () -> Unit,
-    onSignInClick: () -> Unit,
+    navigateUp: () -> Unit,
+    navigateToSignUp: () -> Unit,
+    navigateToHome: () -> Unit,
     viewModel: SignInViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -65,18 +65,18 @@ fun SignInRoute(
 
     LaunchedEffect(uiState) {
         if (uiState is UiState.Success) {
-            onSignInClick()
+            navigateToHome()
         }
     }
 
     SignInScreen(
-        onBackClick = onBackClick,
+        onBackClick = navigateUp,
         userId = state.userId,
         onUserIdChanged = viewModel::updateUserId,
         userPassword = state.password,
         onPasswordChanged = viewModel::updatePassword,
         onSignInClick = viewModel::signIn,
-        onSignUpClick = onSignUpClick,
+        onSignUpClick = navigateToSignUp,
         isButtonEnabled = state.isInputValid,
         paddingValues = paddingValues
     )
