@@ -9,6 +9,6 @@ import javax.inject.Inject
 class UserRemoteDataSourceImpl @Inject constructor(
     private val userService: UserService
 ) : UserRemoteDataSource{
-    override suspend fun getUserNickName(userId: Int): BaseResponse<MyNickNameResponseDto> =
-        userService.getUserNickName(userId)
+    override suspend fun getUserNickName(): BaseResponse<MyNickNameResponseDto> =
+        userService.getUserNickName()
 }

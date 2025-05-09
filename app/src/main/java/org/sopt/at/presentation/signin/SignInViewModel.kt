@@ -104,13 +104,16 @@ class SignInViewModel @Inject constructor(
                 authRepository.signIn(_state.value.userId, _state.value.password)
             }.onSuccess { result ->
                 result.fold(
-                    onSuccess = {
+                    onSuccess = { signInEntity ->
                         _state.value = _state.value.copy(isSignInSuccessful = true)
                         _uiState.value = UiState.Success(Unit)
 
+                        // 로그인 성공 시 DataStore에 자격증명과 userId 저장
                         dataStoreRepository.saveUserCredentials(_state.value.userId, _state.value.password)
+                        dataStoreRepository.saveUserId(signInEntity.userId)
                         
                         if (!isAutoLogin) {
+                            // 수동 로그인 시에만 자동 로그인 활성화 및 메시지 표시
                             dataStoreRepository.setAutoLogin(true)
                             _sideEffect.emit(SignInSideEffect.ShowSnackbar("로그인에 성공했습니다."))
                         }

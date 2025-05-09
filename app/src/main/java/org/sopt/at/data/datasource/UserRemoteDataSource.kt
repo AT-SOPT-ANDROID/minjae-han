@@ -4,5 +4,5 @@ import org.sopt.at.core.network.BaseResponse
 import org.sopt.at.data.dto.response.MyNickNameResponseDto
 
 interface UserRemoteDataSource {
-    suspend fun getUserNickName(userId: Int): BaseResponse<MyNickNameResponseDto>
+    suspend fun getUserNickName(): BaseResponse<MyNickNameResponseDto>
 }

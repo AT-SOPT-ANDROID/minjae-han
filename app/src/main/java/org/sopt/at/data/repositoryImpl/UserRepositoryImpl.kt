@@ -9,8 +9,8 @@ import javax.inject.Inject
 class UserRepositoryImpl @Inject constructor(
     private val userDataSource: UserRemoteDataSource
 ) : UserRepository {
-    override suspend fun getUserNickName(userId: Int): Result<UserEntity> =
+    override suspend fun getUserNickName(): Result<UserEntity> =
         runCatching {
-            userDataSource.getUserNickName(userId).data!!.toDomain()
+            userDataSource.getUserNickName().data!!.toDomain()
         }
 }

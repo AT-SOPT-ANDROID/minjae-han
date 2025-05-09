@@ -3,17 +3,18 @@ package org.sopt.at.presentation.mypage
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.sopt.at.domain.repository.DataStoreRepository
+import org.sopt.at.domain.repository.UserRepository
+import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
     private val _userId = MutableStateFlow<String?>(null)
     val userId: StateFlow<String?> = _userId.asStateFlow()
@@ -24,9 +25,13 @@ class MyPageViewModel @Inject constructor(
 
     private fun loadUserData() {
         viewModelScope.launch {
-            dataStoreRepository.getUserId().collectLatest { userId ->
-                _userId.value = userId
-            }
+            userRepository.getUserNickName()
+                .onSuccess { response ->
+                    _userId.value = response.nickname
+                }
+                .onFailure {
+                    _userId.value = "불러오기 실패임"
+                }
         }
     }
 

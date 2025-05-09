@@ -11,54 +11,44 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import org.sopt.at.data.datasource.DataStoreDataSource
 import org.sopt.at.domain.repository.DataStoreRepository
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preferences")
 
 @Singleton
 class DataStoreRepositoryImpl @Inject constructor(
-    private val context: Context
+    private val dataSource: DataStoreDataSource
 ) : DataStoreRepository {
-    private val userId = stringPreferencesKey("user_id")
-    private val userPassword = stringPreferencesKey("user_password")
-    private val autoLogin = booleanPreferencesKey("auto_login_enabled")
-
     override suspend fun saveUserCredentials(id: String, password: String) {
-        context.dataStore.edit { preferences ->
-            preferences[userId] = id
-            preferences[userPassword] = password
-        }
+        dataSource.saveUserCredentials(id, password)
     }
 
     override fun getUserId(): Flow<String?> {
-        return context.dataStore.data.map { preferences ->
-            preferences[userId]
-        }
+        return dataSource.getUserId()
     }
 
     override fun getUserPassword(): Flow<String?> {
-        return context.dataStore.data.map { preferences ->
-            preferences[userPassword]
-        }
+        return dataSource.getUserPassword()
     }
 
     override suspend fun clearUserCredentials() {
-        context.dataStore.edit { preferences ->
-            preferences.remove(userId)
-            preferences.remove(userPassword)
-            preferences[autoLogin] = false
-        }
+        dataSource.clearUserCredentials()
     }
 
     override suspend fun setAutoLogin(enabled: Boolean) {
-        context.dataStore.edit { preferences ->
-            preferences[autoLogin] = enabled
-        }
+        dataSource.setAutoLogin(enabled)
     }
 
     override fun isAutoLoginEnabled(): Flow<Boolean> {
-        return context.dataStore.data.map { preferences ->
-            preferences[autoLogin] ?: false
-        }
+        return dataSource.isAutoLoginEnabled()
+    }
+
+    override suspend fun saveUserId(id: Int) {
+        dataSource.saveUserId(id)
+    }
+
+    override fun getLoginUserId(): Flow<Int?> {
+        return dataSource.getLoginUserId()
     }
 }

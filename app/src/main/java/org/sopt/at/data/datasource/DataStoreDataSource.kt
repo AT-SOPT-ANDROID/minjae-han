@@ -1,18 +1,18 @@
-package org.sopt.at.domain.repository
+package org.sopt.at.data.datasource
 
 import kotlinx.coroutines.flow.Flow
 
-interface DataStoreRepository {
+interface DataStoreDataSource {
     suspend fun saveUserCredentials(id: String, password: String)
 
     suspend fun saveUserId(id: Int)
-    
+
     fun getUserId(): Flow<String?>
 
     fun getUserPassword(): Flow<String?>
 
     fun getLoginUserId(): Flow<Int?>
-    
+
     suspend fun clearUserCredentials()
 
     suspend fun setAutoLogin(enabled: Boolean)

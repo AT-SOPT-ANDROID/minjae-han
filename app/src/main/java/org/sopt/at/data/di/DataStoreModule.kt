@@ -7,16 +7,24 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+import org.sopt.at.data.datasource.DataStoreDataSource
+import org.sopt.at.data.datasourceimpl.DataStoreDataSourceImpl
 import org.sopt.at.data.repositoryImpl.DataStoreRepositoryImpl
 import org.sopt.at.domain.repository.DataStoreRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DataModule {
+object DataStoreModule {
 
     @Provides
     @Singleton
-    fun provideUserRepository(@ApplicationContext context: Context): DataStoreRepository {
-        return DataStoreRepositoryImpl(context)
+    fun provideDataStoreDataSource(@ApplicationContext context: Context): DataStoreDataSource {
+        return DataStoreDataSourceImpl(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDataStoreRepository(dataSource: DataStoreDataSource): DataStoreRepository {
+        return DataStoreRepositoryImpl(dataSource)
     }
 }
