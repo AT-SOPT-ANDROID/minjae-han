@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.sopt.at.core.state.UiState
-import org.sopt.at.domain.repository.UserRepository
+import org.sopt.at.domain.repository.DataStoreRepository
 import org.sopt.at.presentation.signin.model.SignInState
 
 sealed class SignInSideEffect {
@@ -25,7 +25,7 @@ private const val MIN_PASSWORD_LENGTH = 8
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(SignInState())
     val state: StateFlow<SignInState> = _state.asStateFlow()
@@ -45,9 +45,9 @@ class SignInViewModel @Inject constructor(
     }
 
     private suspend fun checkAutoLogin() {
-        val storedId = userRepository.getUserId().first()
-        val storedPassword = userRepository.getUserPassword().first()
-        val autoLoginEnabled = userRepository.isAutoLoginEnabled().first()
+        val storedId = dataStoreRepository.getUserId().first()
+        val storedPassword = dataStoreRepository.getUserPassword().first()
+        val autoLoginEnabled = dataStoreRepository.isAutoLoginEnabled().first()
 
         if (storedId != null && storedPassword != null && autoLoginEnabled == true) {
             _state.value = _state.value.copy(
@@ -98,8 +98,8 @@ class SignInViewModel @Inject constructor(
             }
 
             try {
-                val storedId = userRepository.getUserId().first()
-                val storedPassword = userRepository.getUserPassword().first()
+                val storedId = dataStoreRepository.getUserId().first()
+                val storedPassword = dataStoreRepository.getUserPassword().first()
 
                 if (storedId == null || storedPassword == null) {
                     // 첫 로그인인 경우 - 회원가입되어 있지 않음
@@ -118,8 +118,8 @@ class SignInViewModel @Inject constructor(
 
                     if (!isAutoLogin) {
                         // 수동 로그인 시에만 자동 로그인 활성화 및 메시지 표시
-                        userRepository.saveUserCredentials(_state.value.userId, _state.value.password)
-                        userRepository.setAutoLogin(true)
+                        dataStoreRepository.saveUserCredentials(_state.value.userId, _state.value.password)
+                        dataStoreRepository.setAutoLogin(true)
                         _sideEffect.emit(SignInSideEffect.ShowSnackbar("로그인에 성공했습니다."))
                     }
                 } else {

@@ -7,7 +7,8 @@ import retrofit2.http.Header
 
 interface UserService {
     @GET("/api/v1/users/me")
-    suspend fun getUser(
-        @Header("userId") userId: Long
+    suspend fun getUserNickName(
+        @Header("userId")
+        userId: Int
     ): BaseResponse<MyNickNameResponseDto>
 }

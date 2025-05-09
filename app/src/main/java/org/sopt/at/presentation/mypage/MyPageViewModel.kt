@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.sopt.at.domain.repository.UserRepository
+import org.sopt.at.domain.repository.DataStoreRepository
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
     private val _userId = MutableStateFlow<String?>(null)
     val userId: StateFlow<String?> = _userId.asStateFlow()
@@ -24,7 +24,7 @@ class MyPageViewModel @Inject constructor(
 
     private fun loadUserData() {
         viewModelScope.launch {
-            userRepository.getUserId().collectLatest { userId ->
+            dataStoreRepository.getUserId().collectLatest { userId ->
                 _userId.value = userId
             }
         }
@@ -32,7 +32,7 @@ class MyPageViewModel @Inject constructor(
 
     fun signOut() {
         viewModelScope.launch {
-            userRepository.setAutoLogin(false)
+            dataStoreRepository.setAutoLogin(false)
             _userId.value = null
         }
     }

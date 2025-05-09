@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.sopt.at.core.state.UiState
 import org.sopt.at.core.util.validation.SoptValidator
-import org.sopt.at.domain.repository.UserRepository
+import org.sopt.at.domain.repository.DataStoreRepository
 import org.sopt.at.presentation.signup.model.SignUpState
 
 sealed class SignUpSideEffect {
@@ -23,7 +23,7 @@ sealed class SignUpSideEffect {
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<SignUpState> = MutableStateFlow(SignUpState())
@@ -72,7 +72,7 @@ class SignUpViewModel @Inject constructor(
             _uiState.value = UiState.Loading
 
             try {
-                userRepository.saveUserCredentials(
+                dataStoreRepository.saveUserCredentials(
                     id = _state.value.userId,
                     password = _state.value.password
                 )
