@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.sopt.at.core.state.UiState
+import org.sopt.at.domain.repository.AuthRepository
 import org.sopt.at.domain.repository.DataStoreRepository
 import org.sopt.at.presentation.signin.model.SignInState
 
@@ -20,12 +21,13 @@ sealed class SignInSideEffect {
     data class ShowSnackbar(val message: String) : SignInSideEffect()
 }
 
-private const val MIN_ID_LENGTH = 6
+private const val MIN_ID_LENGTH = 8
 private const val MIN_PASSWORD_LENGTH = 8
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(SignInState())
     val state: StateFlow<SignInState> = _state.asStateFlow()
@@ -45,18 +47,22 @@ class SignInViewModel @Inject constructor(
     }
 
     private suspend fun checkAutoLogin() {
-        val storedId = dataStoreRepository.getUserId().first()
-        val storedPassword = dataStoreRepository.getUserPassword().first()
-        val autoLoginEnabled = dataStoreRepository.isAutoLoginEnabled().first()
+        runCatching {
+            val storedId = dataStoreRepository.getUserId().first()
+            val storedPassword = dataStoreRepository.getUserPassword().first()
+            val autoLoginEnabled = dataStoreRepository.isAutoLoginEnabled().first()
 
-        if (storedId != null && storedPassword != null && autoLoginEnabled == true) {
-            _state.value = _state.value.copy(
-                userId = storedId,
-                password = storedPassword,
-                isInputValid = validateInput(storedId, storedPassword)
-            )
-            _autoLoginChecked.value = true
-            signIn(isAutoLogin = true)
+            if (storedId != null && storedPassword != null && autoLoginEnabled == true) {
+                _state.value = _state.value.copy(
+                    userId = storedId,
+                    password = storedPassword,
+                    isInputValid = validateInput(storedId, storedPassword)
+                )
+                _autoLoginChecked.value = true
+                signIn(isAutoLogin = true)
+            }
+        }.onFailure {
+            _sideEffect.emit(SignInSideEffect.ShowSnackbar("자동 로그인 실패 아마 토큰 만료겠죠뭐"))
         }
     }
 
@@ -75,9 +81,7 @@ class SignInViewModel @Inject constructor(
     }
 
     private fun validateInput(id: String, password: String): Boolean {
-        return id.length >= MIN_ID_LENGTH && password.length >= MIN_PASSWORD_LENGTH &&
-            password.any { it.isDigit() } &&
-            password.any { it.isLetter() }
+        return id.length >= MIN_ID_LENGTH && password.length >= MIN_PASSWORD_LENGTH
     }
 
     fun signIn() {
@@ -85,11 +89,10 @@ class SignInViewModel @Inject constructor(
     }
 
     private fun signIn(isAutoLogin: Boolean) {
-        if (!_state.value.isInputValid) {
+        if (!_state.value.isInputValid && !isAutoLogin) {
             viewModelScope.launch {
                 _sideEffect.emit(SignInSideEffect.ShowSnackbar("아이디는 최소 6자, 비밀번호는 8자 이상 (숫자와 문자 포함) 입력해주세요"))
             }
-            return
         }
 
         viewModelScope.launch {
@@ -97,43 +100,32 @@ class SignInViewModel @Inject constructor(
                 _uiState.value = UiState.Loading
             }
 
-            try {
-                val storedId = dataStoreRepository.getUserId().first()
-                val storedPassword = dataStoreRepository.getUserPassword().first()
+            runCatching {
+                authRepository.signIn(_state.value.userId, _state.value.password)
+            }.onSuccess { result ->
+                result.fold(
+                    onSuccess = {
+                        _state.value = _state.value.copy(isSignInSuccessful = true)
+                        _uiState.value = UiState.Success(Unit)
 
-                if (storedId == null || storedPassword == null) {
-                    // 첫 로그인인 경우 - 회원가입되어 있지 않음
-                    if (isAutoLogin) {
-                        // 자동로그인 시도였으나 저장된 정보가 없음
-                        return@launch
-                    }
-                    _uiState.value = UiState.Failure("저장된 사용자 정보가 없습니다. 회원가입이 필요합니다.")
-                    _sideEffect.emit(SignInSideEffect.ShowSnackbar("저장된 사용자 정보가 없습니다. 회원가입이 필요합니다."))
-                    return@launch
-                }
-
-                if (_state.value.userId == storedId && _state.value.password == storedPassword) {
-                    _state.value = _state.value.copy(isSignInSuccessful = true)
-                    _uiState.value = UiState.Success(Unit)
-
-                    if (!isAutoLogin) {
-                        // 수동 로그인 시에만 자동 로그인 활성화 및 메시지 표시
                         dataStoreRepository.saveUserCredentials(_state.value.userId, _state.value.password)
-                        dataStoreRepository.setAutoLogin(true)
-                        _sideEffect.emit(SignInSideEffect.ShowSnackbar("로그인에 성공했습니다."))
+                        
+                        if (!isAutoLogin) {
+                            dataStoreRepository.setAutoLogin(true)
+                            _sideEffect.emit(SignInSideEffect.ShowSnackbar("로그인에 성공했습니다."))
+                        }
+                    },
+                    onFailure = { error ->
+                        if (!isAutoLogin) {
+                            _uiState.value = UiState.Failure("로그인 실패: ${error.message}")
+                            _sideEffect.emit(SignInSideEffect.ShowSnackbar("로그인에 실패했습니다: ${error.message}"))
+                        }
                     }
-                } else {
-                    if (isAutoLogin) {
-                        // 자동로그인 실패 시 아무 메시지 표시하지 않음
-                        return@launch
-                    }
-                    _uiState.value = UiState.Failure("아이디 또는 비밀번호가 일치하지 않습니다.")
-                    _sideEffect.emit(SignInSideEffect.ShowSnackbar("아이디 또는 비밀번호가 일치하지 않습니다."))
-                }
-            } catch (e: Exception) {
+                )
+            }.onFailure { exception ->
                 if (!isAutoLogin) {
-                    _uiState.value = UiState.Failure("로그인 중 오류가 발생했습니다: ${e.message}")
-                    _sideEffect.emit(SignInSideEffect.ShowSnackbar("로그인 중 오류가 발생했습니다: ${e.message}"))
+                    _uiState.value = UiState.Failure("로그인 중 오류 발생: ${exception.message}")
+                    _sideEffect.emit(SignInSideEffect.ShowSnackbar("로그인 중 오류가 발생했습니다: ${exception.message}"))
                 }
             }
         }

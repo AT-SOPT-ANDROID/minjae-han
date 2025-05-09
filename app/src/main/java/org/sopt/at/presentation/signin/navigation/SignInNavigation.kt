@@ -19,14 +19,14 @@ fun NavGraphBuilder.signInNavGraph(
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     navigateToHome: () -> Unit,
-    navigateToSignUpId: () -> Unit
+    navigateToSignUp: () -> Unit
 ) {
     composable<SignIn> {
         SignInRoute(
             paddingValues = paddingValues,
-            onBackClick = navigateUp,
-            onSignUpClick = navigateToSignUpId,
-            onSignInClick = navigateToHome
+            navigateUp = navigateUp,
+            navigateToSignUp = navigateToSignUp,
+            navigateToHome = navigateToHome
         )
     }
 }

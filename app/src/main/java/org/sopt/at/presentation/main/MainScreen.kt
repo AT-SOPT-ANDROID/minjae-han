@@ -89,7 +89,7 @@ fun MainScreen(
                     paddingValues = paddingValues,
                     navigateUp = navigator::navigateUp,
                     navigateToHome = navigator::navigateToHome,
-                    navigateToSignUpId = navigator::navigateToSignUpId
+                    navigateToSignUp = navigator::navigateToSignUpId
                 )
                 signUpNavGraph(
                     paddingValues = paddingValues,
