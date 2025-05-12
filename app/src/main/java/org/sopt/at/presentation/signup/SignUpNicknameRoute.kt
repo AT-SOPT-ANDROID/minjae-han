@@ -26,14 +26,14 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import org.sopt.at.core.designsystem.component.button.BasicButton
-import org.sopt.at.core.designsystem.component.textfield.UserIdTextField
+import org.sopt.at.core.designsystem.component.textfield.NicknameTextField
 import org.sopt.at.core.designsystem.component.topbar.BasicTopBar
 import org.sopt.at.core.designsystem.event.LocalSnackBarTrigger
 import org.sopt.at.core.util.extension.addFocusCleaner
 import org.sopt.at.core.util.extension.imePadding
 
 @Composable
-fun SignUpIdRoute(
+fun SignUpNicknameRoute(
     paddingValues: PaddingValues,
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
@@ -53,12 +53,12 @@ fun SignUpIdRoute(
     }
 
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val isButtonEnabled = viewModel.isValidUserId(state.userId)
+    val isButtonEnabled = viewModel.isValidNickname(state.nickname)
 
-    SignUpIdScreen(
+    SignUpNicknameScreen(
         onBackClick = onBackClick,
-        userId = state.userId,
-        onUserIdChanged = viewModel::updateUserId,
+        userNickName = state.nickname,
+        onUserIdChanged = viewModel::updateNickname,
         onNextClick = onNextClick,
         isButtonEnabled = isButtonEnabled,
         paddingValues = paddingValues
@@ -66,10 +66,10 @@ fun SignUpIdRoute(
 }
 
 @Composable
-fun SignUpIdScreen(
+private fun SignUpNicknameScreen(
     paddingValues: PaddingValues,
     onBackClick: () -> Unit,
-    userId: String,
+    userNickName: String,
     onUserIdChanged: (String) -> Unit,
     onNextClick: () -> Unit,
     isButtonEnabled: Boolean,
@@ -101,7 +101,7 @@ fun SignUpIdScreen(
         Spacer(modifier = Modifier.height(40.dp))
 
         Text(
-            text = "아이디를 입력해주세요.",
+            text = "닉네임을 입력해주세요.",
             fontSize = 28.sp,
             color = Color.White,
             fontWeight = FontWeight.Bold,
@@ -111,21 +111,21 @@ fun SignUpIdScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        UserIdTextField(
-            value = userId,
+        NicknameTextField(
+            value = userNickName,
             onValueChanged = onUserIdChanged,
             onDoneAction = {
                 keyboardController?.hide()
                 focusManager.clearFocus()
             },
-            placeholder = "아이디",
+            placeholder = "닉네임",
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "영문 소문자 또는 영문 소문자, 숫자 조합 6 ~ 12자리",
+            text = "닉네임은 한글/영어/숫자만 사용 가능하며 1자 ~ 20자 이어야 합니다.",
             fontSize = 12.sp,
             color = Color.Gray,
             textAlign = TextAlign.Start,

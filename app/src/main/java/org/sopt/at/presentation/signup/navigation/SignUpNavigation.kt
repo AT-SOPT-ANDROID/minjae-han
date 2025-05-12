@@ -12,6 +12,7 @@ import kotlinx.serialization.Serializable
 import org.sopt.at.core.navigation.Route
 import org.sopt.at.presentation.signup.MainSignUpScreen
 import org.sopt.at.presentation.signup.SignUpIdRoute
+import org.sopt.at.presentation.signup.SignUpNicknameRoute
 import org.sopt.at.presentation.signup.SignUpPasswordRoute
 import org.sopt.at.presentation.signup.SignUpViewModel
 
@@ -42,10 +43,31 @@ fun NavGraphBuilder.signUpGraph(
     navigateUp: () -> Unit,
     navigateToSignIn: () -> Unit
 ) {
+    composable<SignUpNickname>(
+        enterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = tween(500)
+            )
+        },
+        exitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = tween(500)
+            )
+        }
+    ) {
+        SignUpNicknameRoute(
+            viewModel = viewModel,
+            paddingValues = paddingValues,
+            onBackClick = navigateUp,
+            onNextClick = { navController.navigate(SignUpId) }
+        )
+    }
     composable<SignUpId>(
         enterTransition = {
             slideIntoContainer(
-                AnimatedContentTransitionScope.SlideDirection.Right,
+                AnimatedContentTransitionScope.SlideDirection.Left,
                 animationSpec = tween(500)
             )
         },
